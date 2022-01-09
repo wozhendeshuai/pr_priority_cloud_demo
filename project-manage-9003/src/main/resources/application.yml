@@ -1,0 +1,32 @@
+server:
+  port: 9003
+spring:
+  application:
+    name: project-manage-9003
+  cloud:
+    nacos:
+      server-addr: 127.0.0.1:8848
+      discovery:
+        server-addr: 127.0.0.1:8848
+    sentinel:
+      transport:
+        # 配置sentinel dashboard地址
+        dashboard: 127.0.0.1:8080
+        # 默认8719端口，若被占用，则每次+1进行查找
+        port: 8718
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/pr_priority?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+
+management:
+  endpoint:
+    web:
+      exposure:
+        include: '*'
+    env:
+      post:
+        enabled: true
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**Mapper.xml
