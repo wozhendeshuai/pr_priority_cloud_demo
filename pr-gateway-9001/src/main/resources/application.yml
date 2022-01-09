@@ -1,0 +1,29 @@
+# Tomcat
+server:
+  port: 9001
+
+# Spring
+spring:
+  application:
+    # 应用名称
+    name: pr-gateway-9001
+  cloud:
+    nacos:
+      discovery:
+        # 服务注册地址
+        server-addr: 127.0.0.1:8848
+    gateway:
+      enabled: true # 开启网关服务
+      discovery: # 服务发现配置
+        locator:
+          enabled: true # 自动依据nacos中的服务id生成路由
+          lower-case-service-id: true #　小写服务id
+      routes:
+        - id: pr_file_service
+          uri: lb://PRFileApplication #找到在nacos上相同服务名的ip
+          predicates:
+            - Path=/prfile/** #匹配后提供服务的路由地址
+        - id: login_module
+          uri: lb://login_module #找到在nacos上相同服务名的ip
+          predicates:
+            - Path=/login/** #匹配后提供服务的路由地址
