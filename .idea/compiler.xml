@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="data-collection-9007" />
+        <module name="time-task-9005" />
+        <module name="project-manage-9003" />
+        <module name="feature-extraction-9006" />
+        <module name="pr-gateway-9001" />
+        <module name="pr-sorting-engine-9004" />
+        <module name="pr-manage-9002" />
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>
