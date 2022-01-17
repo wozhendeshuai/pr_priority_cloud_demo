@@ -1,9 +1,12 @@
 package com.jjyu.controller;
 
+
+import com.jjyu.entity.RepoBaseEntity;
 import com.jjyu.entity.TeamEntity;
-import com.jjyu.service.TeamService;
+import com.jjyu.service.RepoService;
 import com.jjyu.utils.ResultForFront;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
@@ -17,27 +20,30 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("team")
+@RequestMapping("repo")
 @Slf4j
-public class TeamController {
-
+public class RepoController {
     @Value("${server.port}")
     private int port;
     @Autowired
-    private TeamService teamService;
+    private LoadBalancerClient loadBalancerClient;
+    @Autowired
+    private RestTemplate restTemplate;
+    @Autowired
+    private RepoService repoService;
 
     //@RequestParam("prId") String prId,@RequestParam("fileId") String fileId
-    @GetMapping("/listteam")
-    public Map<String, Object> listTeam() {
+    @GetMapping("/listrepo")
+    public Map<String, Object> findPRselfAndFile() {
         log.info("=============listTeam");
 
 
-        List<TeamEntity> teamEntityList = teamService.getAllTeam();
-        for (TeamEntity temp : teamEntityList) {
+        List<RepoBaseEntity> repoBaseEntityList = repoService.getAllRepo();
+        for (RepoBaseEntity temp : repoBaseEntityList) {
             log.info(temp.toString());
         }
 
 
-        return ResultForFront.ok().put("status", true).put("port", "当前的端口是：" + port).put("teamEntityList", teamEntityList);
+        return ResultForFront.ok().put("status", true).put("port", "当前的端口是：" + port).put("repoBaseEntityList", repoBaseEntityList);
     }
 }

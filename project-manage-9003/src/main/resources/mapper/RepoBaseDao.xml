@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jjyu.dao.RepoBaseDao">
+    <resultMap id="repoBaseResultMap" type="com.jjyu.entity.RepoBaseEntity">
+        <id property="repoId" column="repo_id"/>
+        <result property="fullName" column="full_name"/>
+        <result property="repoName" column="repo_name"/>
+        <result property="repoCreatedAt" column="repo_created_at"/>
+        <result property="useLanguage" column="use_language"/>
+        <result property="languages" column="languages"/>
+        <result property="projectDomain" column="project_domain"/>
+        <association property="teamEntity" javaType="com.jjyu.entity.TeamEntity">
+            <id property="teamId" column="team_id"/>
+            <result property="teamName" column="team_name"/>
+            <result property="teamSize" column="team_size"/>
+        </association>
+    </resultMap>
+
+
+    <!-- 根据key，查询value -->
+    <select id="selectAllRepo" resultMap="repoBaseResultMap">
+        select repo_id,full_name,repo_name,team.team_id,team.team_name,team.team_size,repo_created_at,use_language,languages,project_domain
+        from repo_base_db as repo,team_base_db as team
+        where repo.team_id=team.team_id
+    </select>
+
+</mapper>
