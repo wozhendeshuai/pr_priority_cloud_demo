@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jjyu.dao.TeamBaseDao">
+    <resultMap id="teamResultMap" type="com.jjyu.entity.TeamEntity">
+        <id property="teamId" column="team_id"/>
+        <result property="teamName" column="team_name"/>
+        <result property="teamSize" column="team_size"/>
+    </resultMap>
+
+
+    <!-- 根据key，查询value -->
+    <select id="selectAllTeam" resultMap="teamResultMap">
+        select *
+        from team_base_db
+    </select>
+
+</mapper>
