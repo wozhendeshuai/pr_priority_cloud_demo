@@ -2,6 +2,8 @@ package com.jjyu.entity;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class TeamEntity {
     /**
@@ -16,4 +18,9 @@ public class TeamEntity {
      * 团队大小
      */
     private Integer teamSize;
+
+    /**
+     * 团队中的人员情况
+     */
+    private List<UserBaseEntity> userBaseEntityList;
 }

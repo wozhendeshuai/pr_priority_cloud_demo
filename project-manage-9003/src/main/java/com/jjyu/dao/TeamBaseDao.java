@@ -8,4 +8,6 @@ import java.util.List;
 @Mapper
 public interface TeamBaseDao {
     public List<TeamEntity> selectAllTeam();
+
+    public List<TeamEntity> selectAllTeamAndUser();
 }

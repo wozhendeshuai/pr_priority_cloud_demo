@@ -37,6 +37,16 @@ public enum UserTeamRole {
         return false;
     }
 
+    public static boolean hasRole(String role) {
+
+        for (UserTeamRole userTeamRole : UserTeamRole.values()) {
+            if (userTeamRole.equals(role)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         return this.userRole + this.explain;

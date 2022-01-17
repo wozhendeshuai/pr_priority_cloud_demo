@@ -7,11 +7,55 @@
         <result property="teamSize" column="team_size"/>
     </resultMap>
 
+    <resultMap id="teamAndUserResultMap" type="com.jjyu.entity.TeamEntity">
+        <id property="teamId" column="team_id"/>
+        <result property="teamName" column="team_name"/>
+        <result property="teamSize" column="team_size"/>
+        <collection property="userBaseEntityList" ofType="com.jjyu.entity.UserBaseEntity" javaType="java.util.List">
+            <id property="userId" column="user_id"></id>
+            <result property="userName" column="user_name"></result>
+            <result property="password" column="password"></result>
+            <result property="email" column="email"></result>
+            <result property="githubToken" column="github_token"></result>
+            <result property="userRoleInTeam" column="user_role_in_team"></result>
+        </collection>
+    </resultMap>
 
-    <!-- 根据key，查询value -->
+    <!--查询所有团队列表，不包含用户-->
     <select id="selectAllTeam" resultMap="teamResultMap">
         select *
         from team_base_db
+    </select>
+    <!--查询所有团队列表，以及团队当中的用户 -->
+    <select id="selectAllTeamAndUser" resultMap="teamAndUserResultMap">
+        SELECT
+            temp.team_id AS team_id,
+            temp.team_name AS team_name,
+            team_size,
+            u.user_id AS user_id,
+            u.user_name AS user_name,
+            PASSWORD,
+            email,
+            github_token,
+            user_role_in_team
+        FROM
+            (
+                SELECT
+                    t.team_id AS team_id,
+                    t.team_name AS team_name,
+                    user_id,
+                    user_name,
+                    user_role_in_team,
+                    team_size
+                FROM
+                    user_team_db AS ut,
+                    team_base_db AS t
+                WHERE
+                    t.team_id = ut.team_id
+            ) AS temp,
+            user_base_db AS u
+        WHERE
+            u.user_id = temp.user_id
     </select>
 
 </mapper>

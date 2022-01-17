@@ -39,6 +39,15 @@ public enum UserRepoRole {
         return false;
     }
 
+    public static boolean hasRole(String role) {
+        for (UserRepoRole userRepoRole : UserRepoRole.values()) {
+            if (userRepoRole.equals(role)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         return this.userRole + this.explain;
