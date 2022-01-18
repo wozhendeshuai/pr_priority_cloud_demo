@@ -25,4 +25,9 @@ public interface TeamService {
      * @return
      */
     boolean hasUserByUserName(String userName,String teamName);
+
+    /**
+     * 向团队中增加用户
+     */
+    public void addUser(String teamName, String userName, String userRoleInTeam);
 }

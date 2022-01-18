@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jjyu.dao.UserBaseDao">
+    <resultMap id="UserBaseResultMap" type="com.jjyu.entity.UserBaseEntity">
+        <id property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="password" column="password"/>
+        <result property="email" column="email"/>
+        <result property="githubToken" column="github_token"/>
+    </resultMap>
+
+
+    <!-- 根据userName，查询用户信息 -->
+    <select id="selectUserByUserName" resultMap="UserBaseResultMap" parameterType="String">
+        SELECT
+            *
+        FROM
+            user_base_db
+        WHERE
+            user_name = #{userName}
+    </select>
+
+</mapper>

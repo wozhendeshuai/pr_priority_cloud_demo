@@ -66,7 +66,7 @@ public class TeamController {
      * @return
      */
     //@RequestParam("prId") String prId,@RequestParam("fileId") String fileId
-    @PostMapping("/addmember")
+    @RequestMapping("/addmember/{teamName}/{userName}/{userRoleInTeam}")
     public Map<String, Object> listTeam(@PathVariable("teamName") String teamName,
                                         @PathVariable("userName") String userName,
                                         @PathVariable("userRoleInTeam") String userRoleInTeam) {
@@ -77,13 +77,14 @@ public class TeamController {
         }
         //判断是否存在该用户
         if (!userService.hasUserByUserName(userName)) {
-            return ResultForFront.error(200, "角色不存在");
+            return ResultForFront.error(200, "用户不存在");
         }
         //判断该用户是否已在团队中。
         if (teamService.hasUserByUserName(userName, teamName)) {
             return ResultForFront.error(200, "用户已在团队");
         }
 
+        teamService.addUser(teamName, userName, userRoleInTeam);
 
         List<TeamEntity> teamEntityList = teamService.getAllTeam();
         for (TeamEntity temp : teamEntityList) {

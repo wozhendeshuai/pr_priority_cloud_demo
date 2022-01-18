@@ -56,6 +56,27 @@
             user_base_db AS u
         WHERE
             u.user_id = temp.user_id
+
+    </select>
+    <!--根据团队名查询团队-->
+    <select id="selectTeamByTeamName" resultMap="teamResultMap">
+        SELECT
+            *
+        FROM
+            team_base_db
+        WHERE
+            team_name = #{teamName}
     </select>
 
+    <!--向特定团队添加成员-->
+    <insert id="addUser">
+        INSERT INTO user_team_db ( team_id, team_name, user_id, user_name, user_role_in_team )
+        VALUES
+            (
+                #{teamId},
+                #{teamName},
+                #{userId},
+                #{userName},
+                #{userRoleInTeam})
+    </insert>
 </mapper>
