@@ -15,6 +15,8 @@ public interface TeamBaseDao {
 
     public TeamEntity selectTeamByTeamName(@Param("teamName") String teamName);
 
-    public void addUser(@Param("teamId")int teamId, @Param("teamName")String teamName, @Param("userId")int userId, @Param("userName")String userName,
+    public void addMember(@Param("teamId")int teamId, @Param("teamName")String teamName, @Param("userId")int userId, @Param("userName")String userName,
                         @Param("userRoleInTeam")String userRoleInTeam);
+
+    public void deleteMember(@Param("teamName")String teamName, @Param("userName")String userName);
 }

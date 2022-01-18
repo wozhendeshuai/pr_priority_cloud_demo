@@ -66,11 +66,10 @@ public class TeamController {
      * @return
      */
     //@RequestParam("prId") String prId,@RequestParam("fileId") String fileId
-    @RequestMapping("/addmember/{teamName}/{userName}/{userRoleInTeam}")
-    public Map<String, Object> listTeam(@PathVariable("teamName") String teamName,
+    @RequestMapping ("/addmember/{teamName}/{userName}/{userRoleInTeam}")
+    public Map<String, Object> addMember(@PathVariable("teamName") String teamName,
                                         @PathVariable("userName") String userName,
                                         @PathVariable("userRoleInTeam") String userRoleInTeam) {
-        log.info("=============listTeam");
         //调用枚举类判断是否有该角色
         if (!UserTeamRole.hasRole(userRoleInTeam)) {
             return ResultForFront.error(200, "角色不存在");
@@ -84,9 +83,9 @@ public class TeamController {
             return ResultForFront.error(200, "用户已在团队");
         }
 
-        teamService.addUser(teamName, userName, userRoleInTeam);
+        teamService.addMember(teamName, userName, userRoleInTeam);
 
-        List<TeamEntity> teamEntityList = teamService.getAllTeam();
+        List<TeamEntity> teamEntityList = teamService.getAllTeamAndUser();
         for (TeamEntity temp : teamEntityList) {
             log.info(temp.toString());
         }
@@ -96,4 +95,36 @@ public class TeamController {
 
         return ResultForFront.ok().put("status", true).put("port", "当前的端口是：" + port).put("teamEntityList", teamEntityList);
     }
+
+    /**
+     *功能描述
+     * @author XJM
+     * @date 2022/1/18
+     * @param teamName
+     * @param userName
+     * @return
+     */
+
+    @RequestMapping("/delmember/{teamName}/{userName}")
+    public Map<String, Object> deleteMember(@PathVariable("teamName") String teamName,
+                             @PathVariable("userName") String userName){
+        //判断是否存在该用户
+        if (!userService.hasUserByUserName(userName)) {
+            return ResultForFront.error(200, "用户不存在");
+        }
+        //判断该用户是否已在团队中。
+        if (!teamService.hasUserByUserName(userName, teamName)) {
+            return ResultForFront.error(200, "用户不在团队");
+        }
+
+        teamService.deleteMember(teamName, userName);
+
+        List<TeamEntity> teamEntityList = teamService.getAllTeamAndUser();
+        for (TeamEntity temp : teamEntityList) {
+            log.info(temp.toString());
+        }
+
+        return ResultForFront.ok().put("status", true).put("port", "当前的端口是：" + port).put("teamEntityList", teamEntityList);
+    }
+
 }

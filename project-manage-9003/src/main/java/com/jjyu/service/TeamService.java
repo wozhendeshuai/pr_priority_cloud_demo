@@ -29,5 +29,15 @@ public interface TeamService {
     /**
      * 向团队中增加用户
      */
-    public void addUser(String teamName, String userName, String userRoleInTeam);
+    public void addMember(String teamName, String userName, String userRoleInTeam);
+
+    /**
+     *向团队中删除用户
+     * @author XJM
+     * @date 2022/1/18
+     * @param teamName
+     * @param userName
+     * @return void
+     */
+    public void deleteMember(String teamName, String userName);
 }

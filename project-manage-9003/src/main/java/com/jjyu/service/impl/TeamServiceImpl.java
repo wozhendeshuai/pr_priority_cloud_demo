@@ -44,10 +44,15 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public void addUser(String teamName, String userName, String userRoleInTeam) {
+    public void addMember(String teamName, String userName, String userRoleInTeam) {
         int userID = userBaseDao.selectUserByUserName(userName).getUserId();
         int teamId = teamBaseDao.selectTeamByTeamName(teamName).getTeamId();
         System.out.println(teamId+" "+teamName+" "+userID+" "+userName+" "+userRoleInTeam);
-        teamBaseDao.addUser(teamId, teamName, userID, userName, userRoleInTeam);
+        teamBaseDao.addMember(teamId, teamName, userID, userName, userRoleInTeam);
+    }
+
+    @Override
+    public void deleteMember(String teamName, String userName) {
+        teamBaseDao.deleteMember(teamName, userName);
     }
 }

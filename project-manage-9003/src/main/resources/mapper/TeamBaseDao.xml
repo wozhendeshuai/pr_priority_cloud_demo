@@ -69,7 +69,7 @@
     </select>
 
     <!--向特定团队添加成员-->
-    <insert id="addUser">
+    <insert id="addMember">
         INSERT INTO user_team_db ( team_id, team_name, user_id, user_name, user_role_in_team )
         VALUES
             (
@@ -79,4 +79,14 @@
                 #{userName},
                 #{userRoleInTeam})
     </insert>
+
+    <delete id="deleteMember">
+        DELETE
+        FROM
+            user_team_db
+        WHERE
+            team_name = #{teamName}
+          AND user_name = #{userName}
+    </delete>
+
 </mapper>
