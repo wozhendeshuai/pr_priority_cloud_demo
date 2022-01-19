@@ -1,6 +1,7 @@
 package com.jjyu.controller;
 
 
+import cn.hutool.core.map.MapUtil;
 import com.jjyu.entity.RepoBaseEntity;
 import com.jjyu.entity.TeamEntity;
 import com.jjyu.service.RepoService;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("repo")
+@RequestMapping("project/repo")
 @Slf4j
 public class RepoController {
     @Value("${server.port}")
@@ -34,7 +35,7 @@ public class RepoController {
 
     //@RequestParam("prId") String prId,@RequestParam("fileId") String fileId
     @GetMapping("/listrepo")
-    public Map<String, Object> findPRselfAndFile() {
+    public ResultForFront findPRselfAndFile() {
         log.info("=============listTeam");
 
 
@@ -44,6 +45,9 @@ public class RepoController {
         }
 
 
-        return ResultForFront.ok().put("status", true).put("port", "当前的端口是：" + port).put("repoBaseEntityList", repoBaseEntityList);
+        return ResultForFront.succ(MapUtil.builder()
+                .put("port", port)
+                .build());
+
     }
 }

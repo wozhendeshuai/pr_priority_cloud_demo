@@ -8,56 +8,44 @@
 
 package com.jjyu.utils;
 
-import org.apache.http.HttpStatus;
+import lombok.Data;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.Serializable;
 
 /**
  * 返回数据
  *
  */
-public class ResultForFront extends HashMap<String, Object> {
-	private static final long serialVersionUID = 1L;
+@Data
+public class ResultForFront implements Serializable {
+	private int code;
+	private String msg;
+	private Object data;
 
-	public ResultForFront() {
-		put("code", 0);
-		put("msg", "success");
+	public static ResultForFront succ(Object data) {
+
+		return succ(200, "操作成功", data);
 	}
-	
-	public static ResultForFront error() {
-		return error(HttpStatus.SC_INTERNAL_SERVER_ERROR, "未知异常，请联系管理员");
-	}
-	
-	public static ResultForFront error(String msg) {
-		return error(HttpStatus.SC_INTERNAL_SERVER_ERROR, msg);
-	}
-	
-	public static ResultForFront error(int code, String msg) {
+
+	public static ResultForFront succ(int code, String msg, Object data) {
 		ResultForFront r = new ResultForFront();
-		r.put("code", code);
-		r.put("msg", msg);
+		r.setCode(code);
+		r.setMsg(msg);
+		r.setData(data);
 		return r;
 	}
 
-	public static ResultForFront ok(String msg) {
-		ResultForFront r = new ResultForFront();
-		r.put("msg", msg);
-		return r;
-	}
-	
-	public static ResultForFront ok(Map<String, Object> map) {
-		ResultForFront r = new ResultForFront();
-		r.putAll(map);
-		return r;
-	}
-	
-	public static ResultForFront ok() {
-		return new ResultForFront();
+	public static ResultForFront fail(String msg) {
+
+		return fail(400, msg, null);
 	}
 
-	public ResultForFront put(String key, Object value) {
-		super.put(key, value);
-		return this;
+	public static ResultForFront fail(int code, String msg, Object data) {
+		ResultForFront r = new ResultForFront();
+		r.setCode(code);
+		r.setMsg(msg);
+		r.setData(data);
+		return r;
 	}
+
 }
