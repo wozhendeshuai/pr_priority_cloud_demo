@@ -14,10 +14,20 @@ public class GetPythonOutputThread {
 
     public static Thread printMessage(final InputStream out, final InputStream err) {
         Thread thread = new Thread(() -> {
-            Reader outReader = new InputStreamReader(out);
+            Reader outReader = null;
+            try {
+                outReader = new InputStreamReader(out,"GBK");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             BufferedReader outBf = new BufferedReader(outReader);
 
-            Reader errReader = new InputStreamReader(err);
+            Reader errReader = null;
+            try {
+                errReader = new InputStreamReader(err,"GBK");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             BufferedReader errBf = new BufferedReader(errReader);
 
             String outLine = null, errLine = null;
