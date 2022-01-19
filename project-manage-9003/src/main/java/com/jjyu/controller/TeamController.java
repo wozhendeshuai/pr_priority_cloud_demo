@@ -97,7 +97,7 @@ public class TeamController {
     }
 
     /**
-     *功能描述
+     *从指定团队中删除用户
      * @author XJM
      * @date 2022/1/18
      * @param teamName
@@ -127,4 +127,34 @@ public class TeamController {
         return ResultForFront.ok().put("status", true).put("port", "当前的端口是：" + port).put("teamEntityList", teamEntityList);
     }
 
+    /**
+     *权限管理
+     * @author XJM
+     * @date 2022/1/19
+     * @param teamName
+     * @param userName
+     * @param userRoleInTeam
+     * @return
+     */
+    @RequestMapping("/updatemember/{teamName}/{userName}/{userRoleInTeam}")
+    public Map<String, Object> updateMember(@PathVariable("teamName") String teamName,
+                                            @PathVariable("userName") String userName,
+                                            @PathVariable("userRoleInTeam") String userRoleInTeam){
+        //判断是否存在该用户
+        if (!userService.hasUserByUserName(userName)) {
+            return ResultForFront.error(200, "用户不存在");
+        }
+        //判断该用户是否已在团队中。
+        if (!teamService.hasUserByUserName(userName, teamName)) {
+            return ResultForFront.error(200, "用户不在团队");
+        }
+
+        teamService.updateMember(teamName, userName, userRoleInTeam);
+        List<TeamEntity> teamEntityList = teamService.getAllTeamAndUser();
+        for (TeamEntity temp : teamEntityList) {
+            log.info(temp.toString());
+        }
+
+        return ResultForFront.ok().put("status", true).put("port", "当前的端口是：" + port).put("teamEntityList", teamEntityList);
+    }
 }

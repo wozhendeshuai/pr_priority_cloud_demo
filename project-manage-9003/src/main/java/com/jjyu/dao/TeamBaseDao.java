@@ -19,4 +19,6 @@ public interface TeamBaseDao {
                         @Param("userRoleInTeam")String userRoleInTeam);
 
     public void deleteMember(@Param("teamName")String teamName, @Param("userName")String userName);
+
+    public void updateMember(@Param("teamName")String teamName, @Param("userName")String userName, @Param("userRoleInTeam")String userRoleInTeam);
 }

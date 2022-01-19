@@ -89,4 +89,11 @@
           AND user_name = #{userName}
     </delete>
 
+    <update id="updateMember">
+        UPDATE user_team_db
+        SET user_role_in_team = #{userRoleInTeam}
+        WHERE
+            user_name = #{userName}
+          AND team_name = #{teamName}
+    </update>
 </mapper>

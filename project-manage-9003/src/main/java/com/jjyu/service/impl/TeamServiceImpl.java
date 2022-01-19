@@ -55,4 +55,9 @@ public class TeamServiceImpl implements TeamService {
     public void deleteMember(String teamName, String userName) {
         teamBaseDao.deleteMember(teamName, userName);
     }
+
+    @Override
+    public void updateMember(String teamName, String userName, String userRoleInTeam) {
+        teamBaseDao.updateMember(teamName, userName, userRoleInTeam);
+    }
 }

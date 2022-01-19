@@ -32,7 +32,7 @@ public interface TeamService {
     public void addMember(String teamName, String userName, String userRoleInTeam);
 
     /**
-     *向团队中删除用户
+     *从团队中删除用户
      * @author XJM
      * @date 2022/1/18
      * @param teamName
@@ -40,4 +40,15 @@ public interface TeamService {
      * @return void
      */
     public void deleteMember(String teamName, String userName);
+
+    /**
+     *权限管理
+     * @author XJM
+     * @date 2022/1/19
+     * @param teamName
+     * @param userName
+     * @param userRoleInTeam
+     * @return void
+     */
+    public void updateMember(String teamName, String userName, String userRoleInTeam);
 }
