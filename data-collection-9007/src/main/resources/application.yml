@@ -1,8 +1,8 @@
 server:
-  port: 9003
+  port: 9007
 spring:
   application:
-    name: project-manage-9003
+    name: data-collection-9007
   cloud:
     nacos:
       server-addr: 127.0.0.1:8848
@@ -16,7 +16,7 @@ spring:
         port: 8718
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/project_manage_db?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/project_manage_db?useUnicode=true&useSSL=false&characterEncoding=utf8&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
     username: root
     password: root
 
