@@ -90,9 +90,12 @@ public class PRTaskController {
                 Class cls = Class.forName(quartz.getJobClassName());
 //                cls.newInstance();
                 //构建job信息
-                JobDetail job = JobBuilder.newJob(cls).withIdentity(quartz.getJobName(),
-                                quartz.getJobGroup())
-                        .withDescription(quartz.getDescription()).build();
+                JobDetail job = JobBuilder.newJob(cls)
+                        .withIdentity(quartz.getJobName(), quartz.getJobGroup())
+                        .withDescription(quartz.getDescription())
+                        .usingJobData("repo_name", prTask.getRepo_name())
+                        .usingJobData("user_name",prTask.getJob_user())
+                        .build();
                 // 触发时间点
                 CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(quartz.getCronExpression());
                 Trigger trigger = TriggerBuilder.newTrigger().withIdentity("trigger" + quartz.getJobName(), quartz.getJobGroup())
