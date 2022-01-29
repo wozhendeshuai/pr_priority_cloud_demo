@@ -8,6 +8,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @TableName("pr_task")
@@ -122,4 +123,17 @@ public class PRTask implements Serializable {
 
     @TableField(exist = false)
     private String oldJobGroup;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PRTask)) return false;
+        PRTask prTask = (PRTask) o;
+        return Objects.equals(id, prTask.id) && Objects.equals(type, prTask.type) && Objects.equals(job_name, prTask.job_name) && Objects.equals(job_group, prTask.job_group) && Objects.equals(repo_name, prTask.repo_name) && Objects.equals(description, prTask.description) && Objects.equals(job_user, prTask.job_user) && Objects.equals(job_class_name, prTask.job_class_name) && Objects.equals(cron_expression, prTask.cron_expression) && Objects.equals(trigger_time, prTask.trigger_time) && Objects.equals(trigger_state, prTask.trigger_state) && Objects.equals(order_by, prTask.order_by) && Objects.equals(remark, prTask.remark) && Objects.equals(create_time, prTask.create_time) && Objects.equals(create_user, prTask.create_user) && Objects.equals(create_organize, prTask.create_organize) && Objects.equals(update_user, prTask.update_user) && Objects.equals(update_time, prTask.update_time) && Objects.equals(auth_organize_ids, prTask.auth_organize_ids) && Objects.equals(auth_user, prTask.auth_user) && Objects.equals(oldJobName, prTask.oldJobName) && Objects.equals(oldJobGroup, prTask.oldJobGroup);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, type, job_name, job_group, repo_name, description, job_user, job_class_name, cron_expression, trigger_time, trigger_state, order_by, remark, create_time, create_user, create_organize, update_user, update_time, auth_organize_ids, auth_user, oldJobName, oldJobGroup);
+    }
 }

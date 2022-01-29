@@ -22,6 +22,7 @@ public class EasyJob implements Job {
         JobDataMap jobDataMap = jobDetail.getJobDataMap();
         String repoName = (String) jobDataMap.get("repo_name");
         String description = jobDetail.getDescription();
+        String type = (String) jobDataMap.get("type");
         Class<? extends Job> jobClass = jobDetail.getJobClass();
         JobKey key = jobDetail.getKey();
 
@@ -29,6 +30,7 @@ public class EasyJob implements Job {
         System.out.println("---------------------------------------------------------------");
         System.out.println("jobDataMap==================>" + jobDataMap);
         System.out.println("repoName==================>" + repoName);
+        System.out.println("type==================>" + type);
         System.out.println("description==================>" + description);
         System.out.println("jobClass==================>" + jobClass.toString());
         System.out.println("key==================>" + key.toString());
