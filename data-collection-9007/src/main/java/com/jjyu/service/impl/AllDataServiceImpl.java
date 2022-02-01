@@ -38,7 +38,5 @@ public class AllDataServiceImpl implements AllDataService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 }
