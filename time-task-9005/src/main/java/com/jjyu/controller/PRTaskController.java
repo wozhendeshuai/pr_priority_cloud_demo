@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.jjyu.entity.PRTask;
 import com.jjyu.entity.QuartzEntity;
 import com.jjyu.service.PRTaskService;
+import com.jjyu.utils.ResultForFront;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +30,11 @@ public class PRTaskController {
     private Scheduler scheduler;
 
     @GetMapping("all")
-    public Map<String, Object> getAll() {
+    public ResultForFront getAll() {
         List<PRTask> list = prTaskService.list();
         Map<String, Object> all = new HashMap<>();
-
-        all.put("allList", list);
-        return all;
+        all.put("data", list);
+        return ResultForFront.succ(all);
     }
 
     /**
@@ -42,7 +42,7 @@ public class PRTaskController {
      * @description 保存
      */
     @PostMapping("save")
-    public String save(@Valid @RequestBody PRTask prTask) {
+    public ResultForFront save(@Valid @RequestBody PRTask prTask) {
         try {
             // 创建用户
             String time = getDateTimeStr();
@@ -59,7 +59,7 @@ public class PRTaskController {
 
             PRTask one = prTaskService.getOne(queryWrapper);
             if (one != null) {
-                return "已存在该项目所属" + prTask.getType() + "定时任务";
+                return ResultForFront.fail("已存在该项目所属" + prTask.getType() + "定时任务");
             } else {
                 try {
                     prTaskService.save(prTask);
@@ -93,7 +93,7 @@ public class PRTaskController {
                             .startNow().withSchedule(cronScheduleBuilder).build();
                     //交由Scheduler安排触发
                     scheduler.scheduleJob(job, trigger);
-                    return "新增定时任务成功";
+                    return ResultForFront.succ(200, "新增定时任务成功", null);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -102,7 +102,7 @@ public class PRTaskController {
             String message = "新增信息失败";
             log.error(message, e);
         }
-        return "新增信息失败";
+        return ResultForFront.fail("新增信息失败");
     }
 
 
@@ -151,7 +151,7 @@ public class PRTaskController {
      * @description 更新
      */
     @PutMapping("/update")
-    public String update(@Valid @RequestBody PRTask prTask) {
+    public ResultForFront update(@Valid @RequestBody PRTask prTask) {
 
         try {
 
@@ -165,7 +165,7 @@ public class PRTaskController {
             queryWrapper.eq("id", prTask.getId());
             PRTask prTaskTemp = prTaskService.getOne(queryWrapper);
             if (prTaskTemp == null) {
-                return "无该PRTask";
+                return ResultForFront.fail("无该PRTask");
             } else {
                 prTaskService.updateById(prTask);
                 try {
@@ -210,7 +210,7 @@ public class PRTaskController {
             String message = "修改定时任务失败";
             log.error(message, e);
         }
-        return "修改定时任务成功";
+        return ResultForFront.fail("修改定时任务成功");
     }
 
 
