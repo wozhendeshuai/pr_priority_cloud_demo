@@ -45,9 +45,7 @@ public class PRSelfEntity {
 
     private Integer reviewCommentsNumber;
 
-
     private Integer commitNumber;
-
 
     private Integer changedFileNum;
 

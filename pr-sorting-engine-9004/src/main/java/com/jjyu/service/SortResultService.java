@@ -1,6 +1,7 @@
 package com.jjyu.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jjyu.entity.PRSelfEntity;
 import com.jjyu.entity.SortResult;
 
 import java.util.List;
@@ -23,5 +24,14 @@ public interface SortResultService extends IService<SortResult> {
      * @param repoName
      * @return
      */
-    public List getPRDataFromDataCollection(String repoName);
+    public List<PRSelfEntity> getPRDataFromDataCollection(String repoName);
+
+    /**
+     * 根据排序规则以及项目名称，对项目处于Open状态的进行排序
+     *
+     * @param repoName
+     * @param sortRule
+     * @return
+     */
+    List<PRSelfEntity> getPRDataBySortRule(String repoName, String sortRule);
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @Slf4j
@@ -29,8 +30,15 @@ public class RuleSortController {
         List reList = sortResultService.getPRDataFromDataCollection(repoName);
         return ResultForFront.succ(reList);
     }
-    //1.获取某一规则对PR的排序列表
 
+    //1.获取某一规则对PR的排序列表
+    @GetMapping("sortOriginalData")
+    public ResultForFront sortOriginalData(@RequestParam("repoName") String repoName,
+                                           @RequestParam("sortRule") String sortRule) {
+
+        List reList = sortResultService.getPRDataBySortRule(repoName,sortRule);
+        return ResultForFront.succ(reList);
+    }
     //2.当有其它对PR的操作时，要实时更新相关数据
 
 }

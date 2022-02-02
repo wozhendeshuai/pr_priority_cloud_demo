@@ -7,6 +7,9 @@ import com.jjyu.entity.PRSelfEntity;
 import com.jjyu.entity.SortResult;
 import com.jjyu.mapper.SortResultMapper;
 import com.jjyu.service.SortResultService;
+import com.jjyu.utils.SortRuleContext;
+import com.jjyu.utils.strategy.ChangeFileSort;
+import com.jjyu.utils.strategy.CreateTimeSort;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
@@ -29,7 +32,7 @@ public class SortResultServiceImpl extends ServiceImpl<SortResultMapper, SortRes
 
     private String serviceId = "pr-gateway-9001";
 
-    public List getPRDataFromDataCollection(String repoName) {
+    public List<PRSelfEntity> getPRDataFromDataCollection(String repoName) {
         //拼接URL
         String path = String.format(serviceurl + "/dataCollection/data/getOpenData?repoName=" + repoName);//
         log.info("============path:  " + path);
@@ -46,6 +49,19 @@ public class SortResultServiceImpl extends ServiceImpl<SortResultMapper, SortRes
         log.info("============dataList:  " + dataList);
 
         return reList;
+    }
+
+    @Override
+    public List<PRSelfEntity> getPRDataBySortRule(String repoName, String sortRule) {
+        List<PRSelfEntity> tempList = getPRDataFromDataCollection(repoName);
+        if ((sortRule.toLowerCase()).equals("createtime")) {
+            SortRuleContext sortRuleContext = new SortRuleContext(new CreateTimeSort());
+            tempList = sortRuleContext.executeStrategy(tempList);
+        } else if ((sortRule.toLowerCase()).equals("changefile")) {
+            SortRuleContext sortRuleContext = new SortRuleContext(new ChangeFileSort());
+            tempList = sortRuleContext.executeStrategy(tempList);
+        }
+        return tempList;
     }
 
     @Override
