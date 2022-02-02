@@ -22,19 +22,27 @@ public class AlgSortController {
     @Autowired
     private SortResultService sortResultService;
 
-    //1.获取某一算法的排序列表
-    @GetMapping("listall")
+    //1.获取某一算法的排序无序列表
+    @GetMapping("listAll")
     public ResultForFront getAll(@RequestParam("repoName") String repoName,
-                                 @RequestParam("algName") String algName) throws ParseException {
+                                 @RequestParam("algName") String algName) {
 
         String dateTime = DateTimeUtil.getDate();
-
         //查询是否已有pr相关定时任务
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("repo_name", repoName);
         queryWrapper.eq("alg_name", algName);
         queryWrapper.eq("sort_day", dateTime);
         List<SortResult> list = sortResultService.list(queryWrapper);
+        return ResultForFront.succ(list);
+    }
+    //1.获取某一算法的排序有序列表
+    @GetMapping("listOrder")
+    public ResultForFront getListorder(@RequestParam("repoName") String repoName,
+                                 @RequestParam("algName") String algName){
+
+        String dateTime = DateTimeUtil.getDate();
+        List<SortResult> list = sortResultService.getSortListByOrder(repoName, dateTime, algName);
         return ResultForFront.succ(list);
     }
     //2.重新训练某一算法模型
