@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.jjyu.entity.SortResult;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SortResultService extends IService<SortResult> {
     /**
@@ -15,4 +16,12 @@ public interface SortResultService extends IService<SortResult> {
      * @return
      */
     List<SortResult> getSortListByOrder(String repoName, String dateTime, String algName);
+
+    /**
+     * 从数据处理微服务获取PR数据
+     *
+     * @param repoName
+     * @return
+     */
+    public List getPRDataFromDataCollection(String repoName);
 }
