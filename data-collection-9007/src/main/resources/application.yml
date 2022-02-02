@@ -15,10 +15,14 @@ spring:
         # 默认8719端口，若被占用，则每次+1进行查找
         port: 8718
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/project_manage_db?useUnicode=true&useSSL=false&characterEncoding=utf8&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
-    username: root
-    password: root
+    dynamic:
+      primary: base
+      datasource:
+        base:
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://localhost:3306/project_data_collection_db?useUnicode=true&useSSL=false&characterEncoding=utf8&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+          username: root
+          password: root
 
 management:
   endpoint:
@@ -29,4 +33,10 @@ management:
       post:
         enabled: true
 mybatis-plus:
+  type-aliases-package: com.jjyu.entity
   mapper-locations: classpath*:/mapper/**.xml
+  configuration:
+    jdbc-type-for-null: null
+    map-underscore-to-camel-case: true # 数据库下划线自动转驼峰标示关闭
+  global-config:
+    banner: false

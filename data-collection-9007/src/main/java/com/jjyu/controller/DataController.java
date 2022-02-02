@@ -2,8 +2,10 @@ package com.jjyu.controller;
 
 
 import cn.hutool.core.map.MapUtil;
+import com.jjyu.entity.PRSelfEntity;
 import com.jjyu.entity.RepoBaseEntity;
 import com.jjyu.service.DataService;
+import com.jjyu.service.PRSelfService;
 import com.jjyu.utils.ResultForFront;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 @RestController()
 @RequestMapping("dataCollection/data")
@@ -19,6 +22,19 @@ import java.util.Date;
 public class DataController {
     @Autowired
     private DataService dataService;
+    @Autowired
+    private PRSelfService prSelfService;
+
+    @GetMapping("/getOpenData")
+    public ResultForFront synData(
+            @RequestParam("repoName") String repoName) {
+        log.info("=============getOpenData执行开始");
+
+        List<PRSelfEntity> allOpenPRList = prSelfService.getAllOpenPRFromRepoName(repoName);
+
+        log.info("=============getOpenData执行结束");
+        return ResultForFront.succ(allOpenPRList);
+    }
 
     @PostMapping("/synData")
     public ResultForFront synData(@RequestParam("maxPRNum") String maxPRNum,
