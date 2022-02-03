@@ -54,10 +54,10 @@ public class SortResultServiceImpl extends ServiceImpl<SortResultMapper, SortRes
     @Override
     public List<PRSelfEntity> getPRDataBySortRule(String repoName, String sortRule) {
         List<PRSelfEntity> tempList = getPRDataFromDataCollection(repoName);
-        if ((sortRule.toLowerCase()).equals("createtime")) {
+        if ((sortRule).equalsIgnoreCase("createtime")) {
             SortRuleContext sortRuleContext = new SortRuleContext(new CreateTimeSort());
             tempList = sortRuleContext.executeStrategy(tempList);
-        } else if ((sortRule.toLowerCase()).equals("changefile")) {
+        } else if ((sortRule).equalsIgnoreCase("changefile")) {
             SortRuleContext sortRuleContext = new SortRuleContext(new ChangeFileSort());
             tempList = sortRuleContext.executeStrategy(tempList);
         }
