@@ -29,7 +29,7 @@ public class AlgSortController {
     @Autowired
     private AlgTestEvalService algTestEvalService;
 
-    //1.获取某一算法的排序无序列表
+    //0.获取某一算法的排序无序列表
     @ApiOperation(value = "获取某一算法的排序无序列表", notes = "listAll")
     @GetMapping("listAll")
     public ResultForFront getAll(@RequestParam("repoName") String repoName,
@@ -56,10 +56,32 @@ public class AlgSortController {
         return ResultForFront.succ(list);
     }
 
-    //2.重新训练某一算法模型
-    //3.重新计算某一算法/所有算法排序列表
-    //4.获取排序列表在测试集上的三个指标效果列表
+    //2.重新训练某一算法模型此处应当为异步方法
+    @GetMapping("reTrainAlg")
+    @ApiOperation(value = "重新训练某一算法模型此处应当为异步方法", notes = "reTrainAlg")
+    public ResultForFront reTrainAlg(@RequestParam("repoName") String repoName,
+                                     @RequestParam("algName") String algName,
+                                     @RequestParam("algPara") String algParam) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("repo_name", repoName);
+        queryWrapper.eq("alg_name", algName);
+        List<AlgTestEval> list = algTestEvalService.list(queryWrapper);
+        return ResultForFront.succ(list);
+    }
 
+    //3.重新计算某一算法/所有算法排序列表
+    @GetMapping("reCalResult")
+    @ApiOperation(value = "重新计算某一算法/所有算法排序列表", notes = "reCalResult")
+    public ResultForFront reCalResult(@RequestParam("repoName") String repoName,
+                                      @RequestParam("algName") String algName) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("repo_name", repoName);
+        queryWrapper.eq("alg_name", algName);
+        List<AlgTestEval> list = algTestEvalService.list(queryWrapper);
+        return ResultForFront.succ(list);
+    }
+
+    //4.获取排序列表在测试集上的三个指标效果列表
     @GetMapping("listEval")
     @ApiOperation(value = "获取排序列表在测试集上的三个指标效果列表", notes = "listEval")
     public ResultForFront getlistEval(@RequestParam("repoName") String repoName,

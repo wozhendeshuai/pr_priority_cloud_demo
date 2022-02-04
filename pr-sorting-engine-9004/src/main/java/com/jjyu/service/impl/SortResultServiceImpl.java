@@ -65,6 +65,16 @@ public class SortResultServiceImpl extends ServiceImpl<SortResultMapper, SortRes
     }
 
     @Override
+    public boolean reTrainAlg(String repoName, String algName, String algPara) {
+        return false;
+    }
+
+    @Override
+    public List<SortResult> reCalResult(String repoName, String algName) {
+        return null;
+    }
+
+    @Override
     public List<SortResult> getSortListByOrder(String repoName, String dateTime, String algName) {
         //查询是否已有pr相关定时任务
         QueryWrapper queryWrapper = new QueryWrapper();

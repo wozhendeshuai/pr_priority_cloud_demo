@@ -3,6 +3,8 @@ package com.jjyu.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.jjyu.entity.PRSelfEntity;
 import com.jjyu.entity.SortResult;
+import com.jjyu.utils.ResultForFront;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
@@ -34,4 +36,23 @@ public interface SortResultService extends IService<SortResult> {
      * @return
      */
     List<PRSelfEntity> getPRDataBySortRule(String repoName, String sortRule);
+
+    /**
+     * 重新训练模型
+     *
+     * @param repoName
+     * @param algName
+     * @param algParam
+     * @return
+     */
+    public boolean reTrainAlg(String repoName, String algName, String algParam);
+
+    /**
+     * 重新利用模型计算排序列表
+     *
+     * @param repoName
+     * @param algName
+     * @return
+     */
+    public List<SortResult> reCalResult(String repoName, String algName);
 }
