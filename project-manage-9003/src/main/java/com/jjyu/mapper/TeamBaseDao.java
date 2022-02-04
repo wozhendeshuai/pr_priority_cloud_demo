@@ -1,5 +1,6 @@
 package com.jjyu.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.jjyu.entity.TeamEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -8,7 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 @Mapper
-public interface TeamBaseDao {
+public interface TeamBaseDao extends BaseMapper<TeamEntity> {
     public List<TeamEntity> selectAllTeam();
 
     public List<TeamEntity> selectAllTeamAndUser();
