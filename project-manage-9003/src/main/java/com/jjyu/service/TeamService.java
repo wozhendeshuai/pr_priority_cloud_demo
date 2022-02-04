@@ -1,10 +1,12 @@
 package com.jjyu.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.jjyu.entity.RepoBaseEntity;
 import com.jjyu.entity.TeamEntity;
 
 import java.util.List;
 
-public interface TeamService {
+public interface TeamService extends IService<TeamEntity> {
     /**
      * 获取所有团队不包括用户
      *

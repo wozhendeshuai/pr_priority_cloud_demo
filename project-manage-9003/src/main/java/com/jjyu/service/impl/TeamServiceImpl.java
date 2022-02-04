@@ -1,5 +1,8 @@
 package com.jjyu.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jjyu.entity.RepoBaseEntity;
+import com.jjyu.mapper.RepoBaseDao;
 import com.jjyu.mapper.TeamBaseDao;
 import com.jjyu.mapper.UserBaseDao;
 import com.jjyu.entity.TeamEntity;
@@ -11,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class TeamServiceImpl implements TeamService {
+public class TeamServiceImpl extends ServiceImpl<TeamBaseDao, TeamEntity> implements TeamService {
     @Autowired
     private TeamBaseDao teamBaseDao;
     @Autowired

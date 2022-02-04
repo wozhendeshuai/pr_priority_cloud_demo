@@ -4,7 +4,8 @@ package com.jjyu.controller;
 import cn.hutool.core.map.MapUtil;
 import com.jjyu.entity.RepoBaseEntity;
 import com.jjyu.entity.TeamEntity;
-import com.jjyu.service.RepoService;
+
+import com.jjyu.service.RepoBaseService;
 import com.jjyu.service.UserService;
 import com.jjyu.utils.ResultForFront;
 import io.swagger.annotations.Api;
@@ -34,7 +35,7 @@ public class RepoController {
     private UserService userService;
 
     @Autowired
-    private RepoService repoService;
+    private RepoBaseService repoBaseService;
 
     //@RequestParam("prId") String prId,@RequestParam("fileId") String fileId
     @GetMapping("/listrepo")
@@ -42,7 +43,7 @@ public class RepoController {
         log.info("=============listTeam");
 
 
-        List<RepoBaseEntity> repoBaseEntityList = repoService.getAllRepo();
+        List<RepoBaseEntity> repoBaseEntityList = repoBaseService.getAllRepo();
         for (RepoBaseEntity temp : repoBaseEntityList) {
             log.info(temp.toString());
         }
