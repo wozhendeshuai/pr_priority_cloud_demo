@@ -34,8 +34,7 @@ public class RepoDataController {
     public ResultForFront getAllData(@RequestParam("userName") String userName,
                                      @RequestParam("repoName") String repoName) {
         log.info("=============listTeam");
-        RepoBaseEntity repoBaseEntity=repoDataService.getRepoBaseDataFromDataCollection(repoName);
-
+        RepoBaseEntity repoBaseEntity = repoDataService.getRepoBaseDataFromDataCollection(repoName);
 
 
         return ResultForFront.succ(repoBaseEntity);

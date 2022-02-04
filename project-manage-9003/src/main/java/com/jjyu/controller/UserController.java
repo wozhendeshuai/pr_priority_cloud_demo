@@ -10,5 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("project/user")
 public class UserController {
     //1.用户基础信息的修改
+    //1.1新增用户
+    //1.2修改用户权限
     //2.用户权限查询
 }
