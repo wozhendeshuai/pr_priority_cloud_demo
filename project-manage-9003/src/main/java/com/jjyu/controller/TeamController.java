@@ -6,6 +6,7 @@ import com.jjyu.service.TeamService;
 import com.jjyu.service.UserService;
 import com.jjyu.utils.ResultForFront;
 import com.jjyu.utils.UserTeamRole;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,9 +19,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Api(value = "project/team", tags = {"团队controller"})
+@Slf4j
 @RestController
 @RequestMapping("project/team")
-@Slf4j
 public class TeamController {
 
     @Value("${server.port}")

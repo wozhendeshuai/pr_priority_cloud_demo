@@ -7,6 +7,7 @@ import com.jjyu.entity.TeamEntity;
 import com.jjyu.service.RepoService;
 import com.jjyu.service.UserService;
 import com.jjyu.utils.ResultForFront;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Api(value = "project/repo", tags = {"项目controller"})
+@Slf4j
 @RestController
 @RequestMapping("project/repo")
-@Slf4j
 public class RepoController {
     @Value("${server.port}")
     private int port;
