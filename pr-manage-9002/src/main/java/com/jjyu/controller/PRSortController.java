@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "prManage/sort", tags = {"PR排序操作"})
 @Slf4j
 @RestController
-@RequestMapping("prSorting/alg")
+@RequestMapping("prManage/sort")
 public class PRSortController {
 
     //1.查看排序列表
