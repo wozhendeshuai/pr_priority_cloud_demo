@@ -4,11 +4,13 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
 @TableName("team_base_db")
-public class TeamEntity {
+public class TeamEntity implements Serializable {
+    private static final long serialVersionUID = -4352868070794165001L;
     /**
      * 团队ID
      */

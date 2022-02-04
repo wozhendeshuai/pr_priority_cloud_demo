@@ -4,11 +4,13 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @TableName("repo_day_db")
-public class RepoDayEntity {
+public class RepoDayEntity implements Serializable {
+    private static final long serialVersionUID = -4352868070794165001L;
     /**
      * 代码仓信息
      */

@@ -1,10 +1,15 @@
 package com.jjyu.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class UserBaseEntity {
+@TableName("user_base_db")
+public class UserBaseEntity implements Serializable {
+    private static final long serialVersionUID = -4352868070794165001L;
     /**
      * 用户ID
      */
