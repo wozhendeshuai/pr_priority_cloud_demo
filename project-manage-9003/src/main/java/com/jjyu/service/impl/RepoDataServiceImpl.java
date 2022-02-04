@@ -3,7 +3,7 @@ package com.jjyu.service.impl;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.jjyu.entity.RepoBaseEntity;
 import com.jjyu.service.RepoDataService;
-import com.jjyu.service.RepoService;
+
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
