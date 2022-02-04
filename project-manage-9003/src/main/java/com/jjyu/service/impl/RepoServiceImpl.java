@@ -1,6 +1,6 @@
 package com.jjyu.service.impl;
 
-import com.jjyu.dao.RepoBaseDao;
+import com.jjyu.mapper.RepoBaseDao;
 import com.jjyu.entity.RepoBaseEntity;
 import com.jjyu.service.RepoService;
 import org.springframework.beans.factory.annotation.Autowired;

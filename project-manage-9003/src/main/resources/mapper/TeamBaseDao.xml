@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jjyu.dao.TeamBaseDao">
+<mapper namespace="com.jjyu.mapper.TeamBaseDao">
     <resultMap id="teamResultMap" type="com.jjyu.entity.TeamEntity">
         <id property="teamId" column="team_id"/>
         <result property="teamName" column="team_name"/>

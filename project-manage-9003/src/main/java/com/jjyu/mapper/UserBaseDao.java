@@ -1,10 +1,8 @@
-package com.jjyu.dao;
+package com.jjyu.mapper;
 
 import com.jjyu.entity.UserBaseEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
 
 /**
  * @author XJM

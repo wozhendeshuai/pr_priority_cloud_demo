@@ -1,6 +1,6 @@
 package com.jjyu.service.impl;
 
-import com.jjyu.dao.UserBaseDao;
+import com.jjyu.mapper.UserBaseDao;
 import com.jjyu.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

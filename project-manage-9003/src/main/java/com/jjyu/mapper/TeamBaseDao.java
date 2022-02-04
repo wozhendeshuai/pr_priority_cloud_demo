@@ -1,4 +1,4 @@
-package com.jjyu.dao;
+package com.jjyu.mapper;
 
 import com.jjyu.entity.TeamEntity;
 import org.apache.ibatis.annotations.Mapper;
