@@ -5,6 +5,8 @@ import com.jjyu.entity.SortResult;
 import com.jjyu.service.SortResultService;
 import com.jjyu.utils.DateTimeUtil;
 import com.jjyu.utils.ResultForFront;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
+@Api(value = "prSorting/rule", tags = {"规则排序"})
 @Slf4j
 @RestController
 @RequestMapping("prSorting/rule")
@@ -24,6 +26,7 @@ public class RuleSortController {
     private SortResultService sortResultService;
 
     //0.先尝试获取原始数据
+    @ApiOperation(value = "先尝试获取原始数据", notes = "listOriginalData")
     @GetMapping("listOriginalData")
     public ResultForFront listOriginalData(@RequestParam("repoName") String repoName) {
 
@@ -32,6 +35,7 @@ public class RuleSortController {
     }
 
     //1.获取某一规则对PR的排序列表
+    @ApiOperation(value = "获取某一规则对PR的排序列表", notes = "sortOriginalData")
     @GetMapping("sortOriginalData")
     public ResultForFront sortOriginalData(@RequestParam("repoName") String repoName,
                                            @RequestParam("sortRule") String sortRule) {
