@@ -78,7 +78,6 @@ public class UserController {
             return ResultForFront.fail("此用户无相关权限");
         }
 
-
         return ResultForFront.succ(userTeamEntity.getUserRoleInTeam());
     }
 }

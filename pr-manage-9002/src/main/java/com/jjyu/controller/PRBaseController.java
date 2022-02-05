@@ -21,17 +21,46 @@ import java.util.List;
 public class PRBaseController {
 
     //1.新建PR
-    @ApiOperation(value = "获取某一算法的排序无序列表", notes = "listAll")
-    @GetMapping("listAll")
-    public ResultForFront getAll(@RequestParam("repoName") String repoName,
-                                 @RequestParam("algName") String algName) {
-
+    @ApiOperation(value = "newPR", notes = "newPR")
+    @GetMapping("newPR")
+    public ResultForFront newPR(@RequestParam("userName") String userName,
+                                @RequestParam("repoName") String repoName) {
 
         return ResultForFront.succ("");
     }
-    //2.合入PR
-    //3.关闭PR
-    //4.查看PR详情
-    //5.评审评论PR
 
+    //2.合入PR
+    @ApiOperation(value = "mergePR", notes = "mergePR")
+    @GetMapping("mergePR")
+    public ResultForFront mergePR(@RequestParam("userName") String userName,
+                                  @RequestParam("prNumber") String prNumber,
+                                  @RequestParam("repoName") String repoName) {
+        return ResultForFront.succ("");
+    }
+
+    //3.关闭PR
+    @ApiOperation(value = "closePR", notes = "closePR")
+    @GetMapping("closePR")
+    public ResultForFront closePR(@RequestParam("userName") String userName,
+                                  @RequestParam("prNumber") String prNumber,
+                                  @RequestParam("repoName") String repoName) {
+        return ResultForFront.succ("");
+    }
+
+    //4.查看PR详情
+    @ApiOperation(value = "prDetail", notes = "prDetail")
+    @GetMapping("prDetail")
+    public ResultForFront prDetail(@RequestParam("prNumber") String prNumber,
+                                   @RequestParam("repoName") String repoName) {
+        return ResultForFront.succ("");
+    }
+    //5.评审评论PR
+    @ApiOperation(value = "commentPR", notes = "commentPR")
+    @GetMapping("commentPR")
+    public ResultForFront commentPR(@RequestParam("userName") String userName,
+                                    @RequestParam("prNumber") String prNumber,
+                                   @RequestParam("repoName") String repoName,
+                                    @RequestParam("commentContent") String commentContent) {
+        return ResultForFront.succ("");
+    }
 }
