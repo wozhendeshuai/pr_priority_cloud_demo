@@ -43,12 +43,13 @@ public class PRSortController {
     @GetMapping("reTrainModel")
     public ResultForFront reTrainModel(@RequestParam("repoName") String repoName,
                                        @RequestParam("algName") String algName,
-                                       @RequestParam("algParam") String algParam) {
+                                       @RequestParam("algParam") String algParam,
+                                       @RequestParam("userName") String userName) {
         return ResultForFront.succ("");
     }
 
     //4.设置排序定时任务
-    @ApiOperation(value = "设置排序定时任务", notes = "getSortTimeTask")
+    @ApiOperation(value = "查看排序定时任务", notes = "getSortTimeTask")
     @GetMapping("getSortTimeTask")
     public ResultForFront getSortTimeTask(@RequestParam("repoName") String repoName,
                                           @RequestParam("algName") String algName) {
@@ -60,7 +61,8 @@ public class PRSortController {
     public ResultForFront setSortTimeTask(@RequestParam("repoName") String repoName,
                                           @RequestParam("algName") String algName,
                                           @RequestParam("algParam") String algParam,
-                                          @RequestParam("time") String time) {
+                                          @RequestParam("time") String time,
+                                          @RequestParam("userName") String userName) {
         return ResultForFront.succ("");
     }
 
