@@ -6,10 +6,10 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * 此类用于展示PR详情界面中单个PR相关信息
+ * 此类用于展示PR排序界面相关PR列表信息
  */
 @Data
-public class PRDetail {
+public class SortedPRDetail {
 
     private Integer prNumber;
 
@@ -43,34 +43,15 @@ public class PRDetail {
 
     private Integer mergeable;
 
-    private String mergeableState;
-
-    private String mergeCommitSha;
-
-    private String assigneesContent;
-
-    private String requestedReviewersContent;
-
     private Integer commentsNumber;
-
-    private String commentsContent;
 
     private Integer reviewCommentsNumber;
 
-    private String reviewCommentsContent;
-
-
     private Integer commitNumber;
-
-    private String commitContent;
-
 
     private Integer changedFileNum;
 
-
     private Integer totalAddLine;
 
-
     private Integer totalDeleteLine;
-
 }
