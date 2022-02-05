@@ -54,13 +54,24 @@ public class PRBaseController {
                                    @RequestParam("repoName") String repoName) {
         return ResultForFront.succ("");
     }
-    //5.评审评论PR
+
+    //5.评论PR
     @ApiOperation(value = "commentPR", notes = "commentPR")
     @GetMapping("commentPR")
     public ResultForFront commentPR(@RequestParam("userName") String userName,
                                     @RequestParam("prNumber") String prNumber,
-                                   @RequestParam("repoName") String repoName,
+                                    @RequestParam("repoName") String repoName,
                                     @RequestParam("commentContent") String commentContent) {
+        return ResultForFront.succ("");
+    }
+
+    //5.评审PR
+    @ApiOperation(value = "reviewPR", notes = "reviewPR")
+    @GetMapping("reviewPR")
+    public ResultForFront reviewPR(@RequestParam("userName") String userName,
+                                   @RequestParam("prNumber") String prNumber,
+                                   @RequestParam("repoName") String repoName,
+                                   @RequestParam("reviewContent") String reviewContent) {
         return ResultForFront.succ("");
     }
 }
