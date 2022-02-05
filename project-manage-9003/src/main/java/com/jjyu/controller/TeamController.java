@@ -115,7 +115,6 @@ public class TeamController {
      * @param userName
      * @return
      */
-
     @RequestMapping("/delmember")
     public ResultForFront deleteMember(@RequestParam("teamName") String teamName,
                                        @RequestParam("userName") String userName) {
