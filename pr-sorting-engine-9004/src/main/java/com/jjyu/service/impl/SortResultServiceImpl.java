@@ -31,7 +31,6 @@ public class SortResultServiceImpl extends ServiceImpl<SortResultMapper, SortRes
     private String serviceurl = "http://localhost:9007";
     // "http://pr-gateway-9001";
 
-    private String serviceId = "pr-gateway-9001";
 
     public List<PRSelfEntity> getPRDataFromDataCollection(String repoName) {
         //拼接URL
