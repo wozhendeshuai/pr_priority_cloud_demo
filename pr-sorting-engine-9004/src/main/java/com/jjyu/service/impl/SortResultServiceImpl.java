@@ -7,6 +7,7 @@ import com.jjyu.entity.PRSelfEntity;
 import com.jjyu.entity.SortResult;
 import com.jjyu.mapper.SortResultMapper;
 import com.jjyu.service.SortResultService;
+import com.jjyu.utils.DateTimeUtil;
 import com.jjyu.utils.SortRuleContext;
 import com.jjyu.utils.strategy.ChangeFileSort;
 import com.jjyu.utils.strategy.CreateTimeSort;
@@ -52,7 +53,7 @@ public class SortResultServiceImpl extends ServiceImpl<SortResultMapper, SortRes
     }
 
     @Override
-    public List<PRSelfEntity> getPRDataBySortRule(String repoName, String sortRule) {
+    public List<SortResult> getPRDataBySortRule(String repoName, String sortRule) {
         List<PRSelfEntity> tempList = getPRDataFromDataCollection(repoName);
         if ((sortRule).equalsIgnoreCase("createtime")) {
             SortRuleContext sortRuleContext = new SortRuleContext(new CreateTimeSort());
@@ -61,7 +62,20 @@ public class SortResultServiceImpl extends ServiceImpl<SortResultMapper, SortRes
             SortRuleContext sortRuleContext = new SortRuleContext(new ChangeFileSort());
             tempList = sortRuleContext.executeStrategy(tempList);
         }
-        return tempList;
+
+        String dateTime = DateTimeUtil.getDate();
+        List<SortResult> reList = new ArrayList<>();
+
+        for (int i = 0; i < tempList.size(); i++) {
+            PRSelfEntity tempPREntity = tempList.get(i);
+            SortResult sortResult = new SortResult();
+            sortResult.setPrNumber(tempPREntity.getPrNumber());
+            sortResult.setSortDay(dateTime);
+            sortResult.setAlgName(sortRule);
+            sortResult.setRepoName(repoName);
+            sortResult.setPrOrder(i);
+        }
+        return reList;
     }
 
     @Override
@@ -83,7 +97,7 @@ public class SortResultServiceImpl extends ServiceImpl<SortResultMapper, SortRes
         queryWrapper.eq("sort_day", dateTime);
         List<SortResult> temp = this.baseMapper.selectList(queryWrapper);
         //按照prOrder升序排列
-        temp.sort(Comparator.comparingInt(o -> Integer.parseInt(o.getPrOrder())));
+        temp.sort(Comparator.comparingInt(o -> o.getPrOrder()));
         return temp;
     }
 }

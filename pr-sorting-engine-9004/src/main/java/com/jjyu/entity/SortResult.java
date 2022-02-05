@@ -35,12 +35,12 @@ public class SortResult implements Serializable {
      * PR编号
      */
     @TableField("pr_number")
-    private String prNumber;
+    private Integer prNumber;
     /**
      * PR排序
      */
     @TableField("pr_order")
-    private String prOrder;
+    private Integer prOrder;
 
 
 }
