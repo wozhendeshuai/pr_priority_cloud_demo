@@ -11,8 +11,10 @@ import java.util.Date;
 public class PRSelfEntity {
     @TableField("pr_number")
     private Integer prNumber;
+
     @TableField("pr_url")
     private String prUrl;
+
     @TableField("repo_name")
     private String repoName;
 
