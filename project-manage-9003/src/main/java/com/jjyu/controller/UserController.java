@@ -53,8 +53,20 @@ public class UserController {
         return ResultForFront.succ(update);
     }
 
-    //1.1新增用户
-    //1.2修改用户权限
+    //1.1数据同步时新增用户，初始化相关数据
+    @ApiOperation(value = "数据同步时新增用户，初始化相关数据", notes = "insertUser")
+    @GetMapping("/insertUser")
+    public ResultForFront insertUser(@RequestParam("repoName") String repoName,
+                                     @RequestParam("userName") String userName) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("user_name", userName);
+        UserBaseEntity userBaseEntityTemp = userService.getOne(queryWrapper);
+        if (userBaseEntityTemp == null) {
+            return ResultForFront.fail("无该用户");
+        }
+        return ResultForFront.succ("");
+    }
+
     //2.用户权限查询
     @ApiOperation(value = "userAuth", notes = "userAuth")
     @GetMapping("/userAuth")
@@ -77,7 +89,6 @@ public class UserController {
         if (userTeamEntity == null) {
             return ResultForFront.fail("此用户无相关权限");
         }
-
         return ResultForFront.succ(userTeamEntity.getUserRoleInTeam());
     }
 }

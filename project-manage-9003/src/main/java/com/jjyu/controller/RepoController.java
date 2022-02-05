@@ -52,8 +52,10 @@ public class RepoController {
         return ResultForFront.succ(MapUtil.builder()
                 .put("port", port)
                 .build());
-
     }
 
+    //1. 手动同步项目以及项目所有数据
+    //2. 设置自动数据同步相关参数
+    //2. 查看自动数据同步相关参数
 
 }

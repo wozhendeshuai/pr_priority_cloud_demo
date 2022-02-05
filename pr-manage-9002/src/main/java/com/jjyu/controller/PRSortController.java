@@ -48,12 +48,19 @@ public class PRSortController {
     }
 
     //4.设置排序定时任务
-    @ApiOperation(value = "设置排序定时任务", notes = "setTimeTask")
-    @GetMapping("setTimeTask")
-    public ResultForFront setTimeTask(@RequestParam("repoName") String repoName,
-                                      @RequestParam("algName") String algName,
-                                      @RequestParam("algParam") String algParam,
-                                      @RequestParam("time") String time) {
+    @ApiOperation(value = "设置排序定时任务", notes = "getSortTimeTask")
+    @GetMapping("getSortTimeTask")
+    public ResultForFront getSortTimeTask(@RequestParam("repoName") String repoName,
+                                          @RequestParam("algName") String algName) {
+        return ResultForFront.succ("");
+    }
+
+    @ApiOperation(value = "设置排序定时任务", notes = "setSortTimeTask")
+    @GetMapping("setSortTimeTask")
+    public ResultForFront setSortTimeTask(@RequestParam("repoName") String repoName,
+                                          @RequestParam("algName") String algName,
+                                          @RequestParam("algParam") String algParam,
+                                          @RequestParam("time") String time) {
         return ResultForFront.succ("");
     }
 
