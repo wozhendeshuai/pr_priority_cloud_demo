@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("prManage/sort")
 public class PRSortController {
-    //1.1.查看算法排序列表
+    //1.1.查看规则排序列表
     @ApiOperation(value = "获取某一规则的排序列表", notes = "listRule")
     @GetMapping("listRule")
     public ResultForFront listRule(@RequestParam("repoName") String repoName,
