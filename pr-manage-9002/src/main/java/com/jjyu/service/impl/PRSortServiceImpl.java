@@ -18,12 +18,11 @@ import java.util.*;
 @Service
 @Slf4j
 public class PRSortServiceImpl implements PRSortService {
-    @Autowired
-    private LoadBalancerClient loadBalancerClient;
+
     @Autowired
     private RestTemplate restTemplate;
 
-    private String sortServiceurl = "http://localhost:9004"; //"http://pr-gateway-9001";
+    private String sortServiceurl = "http://localhost:9004";//"pr-sorting-engine-9004"; // //"http://pr-gateway-9001";
     private String dataServiceurl = "http://localhost:9007"; //"http://pr-gateway-9001";
 
     @Override
@@ -45,7 +44,7 @@ public class PRSortServiceImpl implements PRSortService {
         String pathData = String.format(dataServiceurl + "/dataCollection/data/getOpenData?repoName=" + repoName);
         log.info("============pathData:  " + pathData);
         Map<String, Object> templateForData = restTemplate.getForObject(pathData, Map.class);
-        List openData = (List) templateForRuleSort.get("data");
+        List openData = (List) templateForData.get("data");
         Map<Integer, SortedPRDetail> prNumberDataMap = new HashMap<>();
         for (int i = 0; i < openData.size(); i++) {
             SortedPRDetail sortedPRDetail = JSON.parseObject(JSON.toJSONString(openData.get(i)), SortedPRDetail.class);

@@ -13,7 +13,7 @@ import java.util.List;
 @Configuration
 public class ApplicationContextConfig {
     @Bean
-    @LoadBalanced
+    //   @LoadBalanced
     public RestTemplate getRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
         List<HttpMessageConverter<?>> list = restTemplate.getMessageConverters();

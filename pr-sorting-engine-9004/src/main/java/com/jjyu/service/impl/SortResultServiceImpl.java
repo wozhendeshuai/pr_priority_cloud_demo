@@ -43,7 +43,7 @@ public class SortResultServiceImpl extends ServiceImpl<SortResultMapper, SortRes
         List<PRSelfEntity> reList = new ArrayList<>();
         for (int i = 0; i < dataList.size(); i++) {
             PRSelfEntity entity = JSON.parseObject(JSON.toJSONString(dataList.get(i)), PRSelfEntity.class);
-            log.info("============dataList:  " + entity.toString());
+            log.info("============dataList:  " + entity.getPrNumber()+"=========="+entity.getTitle());
             reList.add(entity);
         }
         log.info("============dataList:  " + dataList);
@@ -73,6 +73,7 @@ public class SortResultServiceImpl extends ServiceImpl<SortResultMapper, SortRes
             sortResult.setAlgName(sortRule);
             sortResult.setRepoName(repoName);
             sortResult.setPrOrder(i);
+            reList.add(sortResult);
         }
         return reList;
     }
