@@ -17,7 +17,7 @@ import java.util.List;
 @Api(value = "prManage/base", tags = {"PR基础操作"})
 @Slf4j
 @RestController
-@RequestMapping("prManage/base")
+@RequestMapping("prManage/prBase")
 public class PRBaseController {
 
     //1.新建PR
