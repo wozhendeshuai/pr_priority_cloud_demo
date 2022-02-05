@@ -23,30 +23,15 @@ public class PRSortServiceImpl implements PRSortService {
     @Autowired
     private RestTemplate restTemplate;
 
-    private String serviceurl = "http://pr-gateway-9001";
-
-    private String serviceId = "pr-gateway-9001";
-
-
-    public Map<Object, Object> getProjectPort() {
-        ServiceInstance serviceInstance = loadBalancerClient.choose(serviceId);
-        log.info("============serviceInstance:  " + serviceInstance.toString());
-        HashMap<Object, Object> map = new HashMap<>();
-        map.put("status", true);
-        String path = String.format(serviceurl + "/project/testport");//
-        log.info("============path:  " + path);
-        Map templateForObject = restTemplate.getForObject(path, Map.class);
-        map.put("map-result1", templateForObject);
-        log.info("============templateForObject:  " + templateForObject);
-        String stringTemplateForObject = restTemplate.getForObject(path, String.class);
-        map.put("string-result1", stringTemplateForObject);
-        log.info("============stringTemplateForObject:  " + stringTemplateForObject);
-        return map;
-    }
+    private String sortServiceurl = "http://localhost:9004"; //"http://pr-gateway-9001";
 
 
     @Override
-    public List<SortedPRDetail> listRule(String userName, String repoName) {
+    public List<SortedPRDetail> listRule(String repoName, String sortRule) {
+        String path = String.format(sortServiceurl + "/prSorting/rule/sortOriginalData?repoName=" + repoName + "&sortRule=" + sortRule);//
+        log.info("============path:  " + path);
+        Map<String, Object> templateForObject = restTemplate.getForObject(path, Map.class);
+
         return null;
     }
 

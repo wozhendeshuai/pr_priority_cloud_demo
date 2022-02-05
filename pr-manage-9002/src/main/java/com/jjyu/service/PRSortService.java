@@ -3,12 +3,13 @@ package com.jjyu.service;
 
 import com.jjyu.entity.PRDetail;
 import com.jjyu.entity.SortedPRDetail;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
 public interface PRSortService {
     //1.获取某一规则的排序列表
-    List<SortedPRDetail> listRule(String userName, String repoName);
+    List<SortedPRDetail> listRule(String repoName,String sortRule);
 
     //2.获取某一算法的排序列表
     List<SortedPRDetail> listAlg(String userName, String prNumber, String repoName);
