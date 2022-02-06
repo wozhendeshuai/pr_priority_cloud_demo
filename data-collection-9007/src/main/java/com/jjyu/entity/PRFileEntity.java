@@ -38,7 +38,7 @@ public class PRFileEntity {
     private Integer containPatch;
 
     @TableField("patch_content")
-    private Date patchContent;
+    private String patchContent;
 
 
 }
