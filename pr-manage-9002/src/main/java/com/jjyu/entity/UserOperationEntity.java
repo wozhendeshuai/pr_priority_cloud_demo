@@ -43,7 +43,7 @@ public class UserOperationEntity implements Serializable {
      * 操作时间
      */
     @TableField("operation_time")
-    private String operationTime;
+    private Date operationTime;
     /**
      * 具体操作
      */
