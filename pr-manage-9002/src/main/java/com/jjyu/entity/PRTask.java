@@ -95,7 +95,6 @@ public class PRTask implements Serializable {
      */
     private String update_time;
 
-
     private List<String> auth_organize_ids;
 
     private String auth_user;
