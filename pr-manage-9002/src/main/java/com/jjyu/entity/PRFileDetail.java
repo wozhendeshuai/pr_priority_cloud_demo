@@ -26,6 +26,6 @@ public class PRFileDetail {
 
     private Integer containPatch;
 
-    private Date patchContent;
+    private String patchContent;
 
 }
