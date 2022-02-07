@@ -1,6 +1,7 @@
 package com.jjyu.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jjyu.entity.PRTask;
 import com.jjyu.entity.RepoDayEntity;
 import com.jjyu.mapper.RepoBaseDao;
 import com.jjyu.entity.RepoBaseEntity;
@@ -28,17 +29,19 @@ public class RepoBaseServiceImpl extends ServiceImpl<RepoBaseDao, RepoBaseEntity
     }
 
     @Override
-    public ResultForFront reSynRepoData(String repoName, String algName, String userName) {
+    public Boolean reSynRepoData(String repoName, String algName, String userName) {
         return null;
     }
 
     @Override
-    public ResultForFront getRepoDataSynTask(String repoName) {
+    public PRTask getRepoDataSynTask(String repoName) {
         return null;
     }
 
     @Override
-    public ResultForFront setRepoDataSynTask(String repoName, String time, String userName) {
+    public Boolean setRepoDataSynTask(PRTask prTask) {
         return null;
     }
+
+
 }

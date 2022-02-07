@@ -2,6 +2,7 @@ package com.jjyu.service;
 
 import cn.hutool.core.map.MapUtil;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jjyu.entity.PRTask;
 import com.jjyu.entity.RepoBaseEntity;
 import com.jjyu.entity.RepoDayEntity;
 import com.jjyu.utils.ResultForFront;
@@ -16,32 +17,31 @@ public interface RepoBaseService extends IService<RepoBaseEntity> {
 
     //@RequestParam("prId") String prId,@RequestParam("fileId") String fileId
     @GetMapping("/listRepoData")
-    public RepoDayEntity listRepoData(String repoName) ;
-
+    public RepoDayEntity listRepoData(String repoName);
 
 
     /**
      * 手动同步项目以及项目所有数据
+     *
      * @param repoName
      * @param algName
      * @param userName
      * @return
      */
-    public ResultForFront reSynRepoData(String repoName, String algName, String userName);
+    public Boolean reSynRepoData(String repoName, String algName, String userName);
 
     /**
      * 查看自动数据同步相关参数
+     *
      * @param repoName
      * @return
      */
-    public ResultForFront getRepoDataSynTask(String repoName);
+    public PRTask getRepoDataSynTask(String repoName);
 
     /**
      * 设置自动数据同步相关参数
-     * @param repoName
-     * @param time
-     * @param userName
+     *
      * @return
      */
-    public ResultForFront setRepoDataSynTask(String repoName,String time,String userName) ;
+    public Boolean setRepoDataSynTask(PRTask prTaske);
 }

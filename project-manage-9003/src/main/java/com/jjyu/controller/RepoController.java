@@ -2,6 +2,7 @@ package com.jjyu.controller;
 
 
 import cn.hutool.core.map.MapUtil;
+import com.jjyu.entity.PRTask;
 import com.jjyu.entity.RepoBaseEntity;
 import com.jjyu.entity.TeamEntity;
 
@@ -15,10 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
@@ -74,10 +72,8 @@ public class RepoController {
     }
 
     @ApiOperation(value = "设置自动数据同步相关参数", notes = "setRepoDataTask")
-    @GetMapping("setRepoDataSynTask")
-    public ResultForFront setRepoDataSynTask(@RequestParam("repoName") String repoName,
-                                          @RequestParam("time") String time,
-                                          @RequestParam("userName") String userName) {
+    @PostMapping("setRepoDataSynTask")
+    public ResultForFront setRepoDataSynTask( PRTask prTask) {
         return ResultForFront.succ("");
     }
 
