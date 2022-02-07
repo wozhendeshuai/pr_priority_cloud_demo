@@ -63,7 +63,7 @@ public class TeamController {
     //这个没改
     @ApiOperation(value = "查看团队列表和团队中的用户", notes = "listTeamAndUser")
     @GetMapping("/listTeamAndUser")
-    public ResultForFront listTeamAndUser() {
+    public ResultForFront listTeamAndUser(@RequestParam("teamName") String teamName) {
         log.info("=============listTeam");
 
         List<TeamEntity> teamEntityList = teamService.getAllTeamAndUser();

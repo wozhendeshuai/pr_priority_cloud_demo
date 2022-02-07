@@ -57,6 +57,7 @@ public class UserController {
     @ApiOperation(value = "数据同步时新增用户，初始化相关数据", notes = "insertUser")
     @GetMapping("/insertUser")
     public ResultForFront insertUser(@RequestParam("repoName") String repoName,
+                                     @RequestParam("teamName") String teamName,
                                      @RequestParam("userName") String userName) {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("user_name", userName);
@@ -71,6 +72,7 @@ public class UserController {
     @ApiOperation(value = "userAuth", notes = "userAuth")
     @GetMapping("/userAuth")
     public ResultForFront userAuth(@RequestParam("repoName") String repoName,
+                                   @RequestParam("teamName") String teamName,
                                    @RequestParam("userName") String userName) {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("user_name", userName);
