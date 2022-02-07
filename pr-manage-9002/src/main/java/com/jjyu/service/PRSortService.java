@@ -2,6 +2,7 @@ package com.jjyu.service;
 
 
 import com.jjyu.entity.PRDetail;
+import com.jjyu.entity.PRTask;
 import com.jjyu.entity.SortedPRDetail;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -24,5 +25,5 @@ public interface PRSortService {
     boolean getSortTimeTask(String userName, String prNumber, String repoName, String commentContent);
 
     //5.设置排序定时任务
-    boolean setSortTimeTask(String userName, String prNumber, String repoName, String reviewContent);
+    boolean setSortTimeTask(PRTask prTask);
 }

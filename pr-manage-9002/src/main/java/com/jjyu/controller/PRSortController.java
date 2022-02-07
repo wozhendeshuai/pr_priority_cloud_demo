@@ -1,15 +1,13 @@
 package com.jjyu.controller;
 
+import com.jjyu.entity.PRTask;
 import com.jjyu.service.PRSortService;
 import com.jjyu.utils.ResultForFront;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Api(value = "prManage/sort", tags = {"PR排序操作"})
 @Slf4j
@@ -63,12 +61,8 @@ public class PRSortController {
     }
 
     @ApiOperation(value = "设置排序定时任务", notes = "setSortTimeTask")
-    @GetMapping("setSortTimeTask")
-    public ResultForFront setSortTimeTask(@RequestParam("repoName") String repoName,
-                                          @RequestParam("algName") String algName,
-                                          @RequestParam("algParam") String algParam,
-                                          @RequestParam("time") String time,
-                                          @RequestParam("userName") String userName) {
+    @PostMapping("setSortTimeTask")
+    public ResultForFront setSortTimeTask(PRTask prTask) {
         return ResultForFront.succ("");
     }
 

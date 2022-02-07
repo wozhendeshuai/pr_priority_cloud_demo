@@ -1,6 +1,7 @@
 package com.jjyu.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.jjyu.entity.PRTask;
 import com.jjyu.entity.SortResult;
 import com.jjyu.entity.SortedPRDetail;
 import com.jjyu.service.PRSortService;
@@ -79,7 +80,7 @@ public class PRSortServiceImpl implements PRSortService {
     }
 
     @Override
-    public boolean setSortTimeTask(String userName, String prNumber, String repoName, String reviewContent) {
+    public boolean setSortTimeTask(PRTask prTask) {
         return false;
     }
 }
