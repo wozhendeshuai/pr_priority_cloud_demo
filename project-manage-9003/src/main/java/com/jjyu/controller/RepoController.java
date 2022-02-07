@@ -58,7 +58,6 @@ public class RepoController {
     @ApiOperation(value = "手动同步项目以及项目所有数据", notes = "reGetRepoData")
     @GetMapping("reSynRepoData")
     public ResultForFront reSynRepoData(@RequestParam("repoName") String repoName,
-                                        @RequestParam("algName") String algName,
                                         @RequestParam("userName") String userName) {
         return ResultForFront.succ("");
     }

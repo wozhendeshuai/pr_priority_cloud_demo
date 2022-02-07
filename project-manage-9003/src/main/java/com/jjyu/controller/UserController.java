@@ -67,9 +67,9 @@ public class UserController {
     }
 
     //2.用户权限查询
-    @ApiOperation(value = "userAuth", notes = "userAuth")
-    @GetMapping("/userAuth")
-    public ResultForFront userAuth(@RequestParam("repoName") String repoName,
+    @ApiOperation(value = "selectUserAuth", notes = "selectUserAuth")
+    @GetMapping("/selectUserAuth")
+    public ResultForFront selectUserAuth(@RequestParam("repoName") String repoName,
                                    @RequestParam("teamName") String teamName,
                                    @RequestParam("userName") String userName) {
         QueryWrapper queryWrapper = new QueryWrapper();
