@@ -41,7 +41,7 @@ public class RepoController {
 
     //@RequestParam("prId") String prId,@RequestParam("fileId") String fileId
     @GetMapping("/listRepoData")
-    public ResultForFront listRepoData() {
+    public ResultForFront listRepoData(@RequestParam("repoName") String repoName) {
         log.info("=============listTeam");
 
 
