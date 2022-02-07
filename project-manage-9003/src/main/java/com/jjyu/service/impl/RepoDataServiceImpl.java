@@ -43,19 +43,7 @@ public class RepoDataServiceImpl implements RepoDataService {
         repoBaseEntity.setFullName((String) dataMap.get("fullName"));
         repoBaseEntity.setRepoName((String) dataMap.get("repoName"));
         log.info("============templateForObject:  " + templateForObject);
-//        String stringTemplateForObject = restTemplate.getForObject(path, String.class);
-//        map.put("string-result1", stringTemplateForObject);
-//        log.info("============stringTemplateForObject:  " + stringTemplateForObject);
 
-
-//        String path2 = String.format(serviceInstance.getUri() + "/project/testport");
-//        log.info("============path2:  " + path2);
-//        Map templateForObject2 = restTemplate.getForObject(path2, Map.class);
-//        map.put("map-result2", templateForObject2);
-//        log.info("============templateForObject2:  " + templateForObject2);
-//        String stringTemplateForObject2 = restTemplate.getForObject(path2, String.class);
-//        map.put("string-result2", stringTemplateForObject2);
-//        log.info("============stringTemplateForObject2:  " + stringTemplateForObject2);
         return repoBaseEntity;
     }
 

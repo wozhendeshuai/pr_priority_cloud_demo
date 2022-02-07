@@ -57,7 +57,7 @@ public class RepoController {
     }
 
     //1. 手动同步项目以及项目所有数据
-    @ApiOperation(value = "手动重新训练排序模型", notes = "reGetRepoData")
+    @ApiOperation(value = "手动同步项目以及项目所有数据", notes = "reGetRepoData")
     @GetMapping("reGetRepoData")
     public ResultForFront reGetRepoData(@RequestParam("repoName") String repoName,
                                         @RequestParam("algName") String algName,
@@ -68,13 +68,13 @@ public class RepoController {
 
     //2. 设置自动数据同步相关参数
     //2. 查看自动数据同步相关参数
-    @ApiOperation(value = "查看数据同步定时任务", notes = "getRepoDataTask")
+    @ApiOperation(value = "查看自动数据同步相关参数", notes = "getRepoDataTask")
     @GetMapping("getRepoDataTask")
     public ResultForFront getRepoDataTask(@RequestParam("repoName") String repoName) {
         return ResultForFront.succ("");
     }
 
-    @ApiOperation(value = "设置数据同步定时任务", notes = "setRepoDataTask")
+    @ApiOperation(value = "设置自动数据同步相关参数", notes = "setRepoDataTask")
     @GetMapping("setRepoDataTask")
     public ResultForFront setRepoDataTask(@RequestParam("repoName") String repoName,
                                           @RequestParam("time") String time,
