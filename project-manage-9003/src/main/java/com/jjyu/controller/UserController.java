@@ -56,9 +56,7 @@ public class UserController {
     //1.1数据同步时新增用户，初始化相关数据
     @ApiOperation(value = "数据同步时新增用户，初始化相关数据", notes = "insertUser")
     @GetMapping("/insertUser")
-    public ResultForFront insertUser(@RequestParam("repoName") String repoName,
-                                     @RequestParam("teamName") String teamName,
-                                     @RequestParam("userName") String userName) {
+    public ResultForFront insertUser(@RequestParam("userName") String userName) {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("user_name", userName);
         UserBaseEntity userBaseEntityTemp = userService.getOne(queryWrapper);
