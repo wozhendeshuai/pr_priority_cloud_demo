@@ -10,9 +10,6 @@ import java.io.Serializable;
 @Data
 public class SortResult implements Serializable {
     private static final long serialVersionUID = -4352868070794165001L;
-
-
-
     /**
      * 排序日期
      */
