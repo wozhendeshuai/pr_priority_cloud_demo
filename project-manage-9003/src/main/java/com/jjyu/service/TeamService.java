@@ -31,7 +31,7 @@ public interface TeamService extends IService<TeamEntity> {
     /**
      * 向团队中增加用户
      */
-    public void addMember(String teamName, String userName, String userRoleInTeam);
+    public boolean addMember(String teamName, String userName, String userRoleInTeam);
 
     /**
      *从团队中删除用户
@@ -41,7 +41,7 @@ public interface TeamService extends IService<TeamEntity> {
      * @param userName
      * @return void
      */
-    public void deleteMember(String teamName, String userName);
+    public boolean deleteMember(String teamName, String userName);
 
     /**
      *权限管理
@@ -52,5 +52,5 @@ public interface TeamService extends IService<TeamEntity> {
      * @param userRoleInTeam
      * @return void
      */
-    public void updateMember(String teamName, String userName, String userRoleInTeam);
+    public boolean updateMember(String teamName, String userName, String userRoleInTeam);
 }
