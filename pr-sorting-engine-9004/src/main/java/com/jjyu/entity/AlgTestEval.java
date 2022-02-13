@@ -49,7 +49,7 @@ public class AlgTestEval implements Serializable {
     /**
      * ndcg
      */
-    @TableField("ndcg")
+    @TableField("kendall_tau_distance")
     private double kendall_tau_distance;
 
 
