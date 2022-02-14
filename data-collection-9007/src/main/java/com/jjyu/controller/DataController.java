@@ -7,6 +7,8 @@ import com.jjyu.entity.RepoBaseEntity;
 import com.jjyu.service.DataService;
 import com.jjyu.service.PRSelfService;
 import com.jjyu.utils.ResultForFront;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+@Api(value = "dataCollection/data", tags = {"部分数据同步接口"})
 @RestController()
 @RequestMapping("dataCollection/data")
 @Slf4j
@@ -26,7 +29,8 @@ public class DataController {
     private PRSelfService prSelfService;
 
     @GetMapping("/getOpenData")
-    public ResultForFront synData(
+    @ApiOperation(value = "getOpenData", notes = "getOpenData")
+    public ResultForFront getOpenData(
             @RequestParam("repoName") String repoName) {
         log.info("=============getOpenData执行开始");
 
@@ -37,6 +41,7 @@ public class DataController {
     }
 
     @PostMapping("/synData")
+    @ApiOperation(value = "synData", notes = "synData")
     public ResultForFront synData(@RequestParam("maxPRNum") String maxPRNum,
                                   @RequestParam("ownerName") String ownerName,
                                   @RequestParam("repoName") String repoName) {
@@ -49,6 +54,7 @@ public class DataController {
     }
 
     @GetMapping("/testbaseEntity")
+    @ApiOperation(value = "testbaseEntity", notes = "testbaseEntity")
     public ResultForFront testbaseEntity(@RequestParam("repoName") String repoName) {
         log.info("=============testbaseEntity执行开始");
 

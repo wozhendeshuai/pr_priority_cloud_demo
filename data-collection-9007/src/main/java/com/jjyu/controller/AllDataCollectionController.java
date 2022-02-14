@@ -5,6 +5,8 @@ import cn.hutool.core.map.MapUtil;
 import com.jjyu.service.AllDataService;
 import com.jjyu.service.DataService;
 import com.jjyu.utils.ResultForFront;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.util.Date;
-
+@Api(value = "dataCollection/allData", tags = {"所有数据同步"})
 @RestController()
 @RequestMapping("dataCollection/allData")
 @Slf4j
@@ -23,6 +25,7 @@ public class AllDataCollectionController {
     private AllDataService allDataService;
 
     @PostMapping("/synAllData")
+    @ApiOperation(value = "synData", notes = "synData")
     public ResultForFront synData(@RequestParam("maxPRNum") String maxPRNum,
                                   @RequestParam("ownerName") String ownerName,
                                   @RequestParam("repoName") String repoName) {
