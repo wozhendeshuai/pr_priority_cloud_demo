@@ -7,6 +7,8 @@ import com.jjyu.entity.PRTask;
 import com.jjyu.entity.QuartzEntity;
 import com.jjyu.service.PRTaskService;
 import com.jjyu.utils.ResultForFront;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +24,14 @@ import java.util.*;
 @Slf4j
 @RestController
 @RequestMapping("prTask")
+@Api(value = "prTask", tags = {"定时任务"})
 public class PRTaskController {
     @Autowired
     private PRTaskService prTaskService;
     @Autowired
     @Qualifier("Scheduler")
     private Scheduler scheduler;
-
+    @ApiOperation(value = "getAll", notes = "getAll")
     @GetMapping("all")
     public ResultForFront getAll() {
         List<PRTask> list = prTaskService.list();
@@ -41,6 +44,7 @@ public class PRTaskController {
      * @title save
      * @description 保存
      */
+    @ApiOperation(value = "save", notes = "save")
     @PostMapping("save")
     public ResultForFront save(@Valid @RequestBody PRTask prTask) {
         try {
@@ -118,6 +122,7 @@ public class PRTaskController {
      * @title del
      * @description 删除
      */
+    @ApiOperation(value = "delete", notes = "delete")
     @DeleteMapping("/delete/{param_ids}")
     public void delete(@NotBlank(message = "{required}") @PathVariable String param_ids) {
 
@@ -151,6 +156,7 @@ public class PRTaskController {
      * @description 更新
      */
     @PutMapping("/update")
+    @ApiOperation(value = "update", notes = "更新")
     public ResultForFront update(@Valid @RequestBody PRTask prTask) {
 
         try {
@@ -217,10 +223,9 @@ public class PRTaskController {
     /**
      * @title execution
      * @description 执行
-     * @author qingfeng
-     * @updateTime 2021/4/3 0003 20:23
      */
     @GetMapping("/execution")
+    @ApiOperation(value = "execution", notes = "执行")
     public void execution(@RequestParam String jobName, @RequestParam String jobGroup) {
 
         try {
@@ -240,10 +245,9 @@ public class PRTaskController {
     /**
      * @title stopOrRestore
      * @description 停止和恢复
-     * @author qingfeng
-     * @updateTime 2021/4/3 0003 20:23
      */
     @GetMapping("/stopOrRestore")
+    @ApiOperation(value = "stopOrRestore", notes = "停止和恢复")
     public void stopOrRestore(PRTask prTask) {
 
         try {
