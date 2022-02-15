@@ -4,6 +4,7 @@ package com.jjyu.controller;
 import cn.hutool.core.map.MapUtil;
 import com.jjyu.service.AllDataService;
 import com.jjyu.service.DataService;
+import com.jjyu.service.PRRepoService;
 import com.jjyu.utils.ResultForFront;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,6 +24,7 @@ import java.util.Date;
 public class AllDataCollectionController {
     @Autowired
     private AllDataService allDataService;
+
 
     @PostMapping("/synAllData")
     @ApiOperation(value = "synData", notes = "synData")

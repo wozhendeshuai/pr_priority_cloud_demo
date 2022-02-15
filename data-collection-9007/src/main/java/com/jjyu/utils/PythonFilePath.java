@@ -8,7 +8,7 @@ public class PythonFilePath {
     /**
      * 获取PR所有相关数据的路径
      */
-    public static final String get_data_step_process_for_java=" E:\\pythonProject\\nju_pr_project\\spider\\project_spider\\get_data_step_process_for_java.py ";
+    public static final String get_data_step_process_for_java=" E:\\PycharmProjects\\nju_pr_project\\java_project\\project_spider\\get_data_step_process_for_java.py ";
     /**
      *获取PR自身相关数据的python文件路径
      */

@@ -1,5 +1,6 @@
 package com.jjyu.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.util.Date;
@@ -18,6 +19,14 @@ public class RepoBaseEntity {
      * 代码仓名称
      */
     private String repoName;
+    /**
+     * 团队ID
+     */
+    private Integer teamId;
+    /**
+     * 团队名称
+     */
+    private String teamName;
     /**
      * 代码仓团队信息
      */
