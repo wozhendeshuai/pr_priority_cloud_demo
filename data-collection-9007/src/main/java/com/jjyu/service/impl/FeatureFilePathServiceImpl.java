@@ -52,7 +52,7 @@ public class FeatureFilePathServiceImpl extends ServiceImpl<FeatureFilePathMappe
             //执行命令
             Process process = Runtime.getRuntime().exec(open_feature_args);
             Thread oThread = GetPythonOutputThread.printMessage(process.getInputStream(), process.getErrorStream());
-//            oThread.start();
+
             oThread.join();
             int exitVal = process.waitFor();
             if (0 != exitVal) {
