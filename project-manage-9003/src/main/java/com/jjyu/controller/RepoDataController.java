@@ -6,11 +6,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.jjyu.entity.RepoBaseEntity;
 import com.jjyu.entity.RepoDayEntity;
-import com.jjyu.service.RepoBaseService;
-import com.jjyu.service.RepoDataService;
+import com.jjyu.entity.TeamEntity;
+import com.jjyu.service.*;
 
-import com.jjyu.service.RepoDayService;
-import com.jjyu.service.UserService;
 import com.jjyu.utils.ResultForFront;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import java.util.List;
+
 @Api(value = "project/repoData", tags = {"项目数据接口"})
 @RestController
 @RequestMapping("project/repoData")
@@ -32,7 +31,7 @@ public class RepoDataController {
     @Resource
     private UserService userService;
     @Autowired
-    private RepoDataService repoDataService;
+    private TeamService teamService;
     @Autowired
     private RepoBaseService repoBaseService;
 
@@ -45,12 +44,12 @@ public class RepoDataController {
     public ResultForFront getAllData(@RequestParam("userName") String userName,
                                      @RequestParam("repoName") String repoName) {
         log.info("=============getAllData");
-        QueryWrapper queryWrapper=new QueryWrapper();
-        queryWrapper.eq("repo_name",repoName);
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("repo_name", repoName);
         RepoBaseEntity repoBaseEntity = repoBaseService.getOne(queryWrapper);
-        queryWrapper=new QueryWrapper();
-        queryWrapper.eq("repo_id",repoBaseEntity.getRepoId());
-        RepoDayEntity repoDayEntity=repoDayService.getOne(queryWrapper);
+        queryWrapper = new QueryWrapper();
+        queryWrapper.eq("repo_id", repoBaseEntity.getRepoId());
+        RepoDayEntity repoDayEntity = repoDayService.getOne(queryWrapper);
         repoDayEntity.setRepoBaseEntity(repoBaseEntity);
         return ResultForFront.succ(repoDayEntity);
 
@@ -60,26 +59,42 @@ public class RepoDataController {
     @PostMapping("/synAllRepoData")
     public ResultForFront synAllRepoData(@RequestBody RepoDayEntity repoDayEntity) {
         log.info("=============synAllRepoData");
-       // RepoBaseEntity repoBaseEntity = repoDataService.getRepoBaseDataFromDataCollection(repoName);
+
         log.info(repoDayEntity.toString());
+        //对团队相关信息进行更新
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("team_name", repoDayEntity.getRepoBaseEntity().getTeamName());
+        TeamEntity teamEntity = teamService.getOne(queryWrapper);
+        if (ObjectUtils.isEmpty(teamEntity)) {
+            teamService.save(repoDayEntity.getRepoBaseEntity().getTeamEntity());
+        } else {
+            UpdateWrapper updateWrapper = new UpdateWrapper();
+            updateWrapper.eq("team_name", repoDayEntity.getRepoBaseEntity().getTeamName());
+            teamService.update(teamEntity, updateWrapper);
+        }
+        //获取到团队ID
+        teamEntity = teamService.getOne(queryWrapper);
         //判断一下是否已有
-        Integer repoId=repoDayEntity.getRepoId();
-        QueryWrapper queryWrapper=new QueryWrapper();
-        queryWrapper.eq("repo_id",repoId);
-        UpdateWrapper updateWrapper=new UpdateWrapper();
-        updateWrapper.eq("repo_id",repoId);
-        RepoBaseEntity repoBaseEntity=repoBaseService.getOne(queryWrapper);
-        RepoDayEntity repoDayEntityTemp=repoDayService.getOne(queryWrapper);
-        if(ObjectUtils.isEmpty(repoBaseEntity)){
-            repoBaseService.save(repoDayEntity.getRepoBaseEntity());
-        }else{
-            repoBaseService.update(repoDayEntity.getRepoBaseEntity(),updateWrapper);
+        Integer repoId = repoDayEntity.getRepoId();
+        queryWrapper = new QueryWrapper();
+        queryWrapper.eq("repo_id", repoId);
+        UpdateWrapper updateWrapper = new UpdateWrapper();
+        updateWrapper.eq("repo_id", repoId);
+        RepoBaseEntity repoBaseEntity = repoBaseService.getOne(queryWrapper);
+        RepoDayEntity repoDayEntityTemp = repoDayService.getOne(queryWrapper);
+
+        RepoBaseEntity repoBase = repoDayEntity.getRepoBaseEntity();
+        repoBase.setTeamId(teamEntity.getTeamId());
+        if (ObjectUtils.isEmpty(repoBaseEntity)) {
+            repoBaseService.save(repoBase);
+        } else {
+            repoBaseService.update(repoBase, updateWrapper);
         }
 
-        if(ObjectUtils.isEmpty(repoDayEntityTemp)){
+        if (ObjectUtils.isEmpty(repoDayEntityTemp)) {
             repoDayService.save(repoDayEntity);
-        }else{
-            repoDayService.update(repoDayEntity,updateWrapper);
+        } else {
+            repoDayService.update(repoDayEntity, updateWrapper);
         }
 
         return ResultForFront.succ(repoDayEntity);

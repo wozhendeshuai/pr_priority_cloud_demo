@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-@TableName("pr_self")
+@TableName("pr_user")
 public class PRUserEntity {
     @TableField("user_id")
     private Integer userId;

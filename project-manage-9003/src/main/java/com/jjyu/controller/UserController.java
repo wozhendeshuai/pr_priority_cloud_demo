@@ -70,8 +70,8 @@ public class UserController {
     @ApiOperation(value = "selectUserAuth", notes = "selectUserAuth")
     @GetMapping("/selectUserAuth")
     public ResultForFront selectUserAuth(@RequestParam("repoName") String repoName,
-                                   @RequestParam("teamName") String teamName,
-                                   @RequestParam("userName") String userName) {
+                                         @RequestParam("teamName") String teamName,
+                                         @RequestParam("userName") String userName) {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("user_name", userName);
         UserBaseEntity userBaseEntityTemp = userService.getOne(queryWrapper);
