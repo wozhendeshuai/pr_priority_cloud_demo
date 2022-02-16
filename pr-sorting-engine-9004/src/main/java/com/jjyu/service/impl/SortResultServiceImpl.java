@@ -8,19 +8,21 @@ import com.jjyu.entity.SortResult;
 import com.jjyu.mapper.SortResultMapper;
 import com.jjyu.service.SortResultService;
 import com.jjyu.utils.DateTimeUtil;
+import com.jjyu.utils.GetPythonOutputThread;
+import com.jjyu.utils.PythonFilePath;
 import com.jjyu.utils.SortRuleContext;
 import com.jjyu.utils.strategy.ChangeFileSort;
 import com.jjyu.utils.strategy.CreateTimeSort;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.Future;
 
 @Service
 @Slf4j
@@ -43,7 +45,7 @@ public class SortResultServiceImpl extends ServiceImpl<SortResultMapper, SortRes
         List<PRSelfEntity> reList = new ArrayList<>();
         for (int i = 0; i < dataList.size(); i++) {
             PRSelfEntity entity = JSON.parseObject(JSON.toJSONString(dataList.get(i)), PRSelfEntity.class);
-            log.info("============dataList:  " + entity.getPrNumber()+"=========="+entity.getTitle());
+            log.info("============dataList:  " + entity.getPrNumber() + "==========" + entity.getTitle());
             reList.add(entity);
         }
         log.info("============dataList:  " + dataList);
@@ -78,9 +80,41 @@ public class SortResultServiceImpl extends ServiceImpl<SortResultMapper, SortRes
         return reList;
     }
 
+    @Async("taskExecutor")
     @Override
-    public boolean reTrainAlg(String repoName, String algName, String algPara) {
-        return false;
+    public Future<String> reTrainAlg(String repoName, String algName, String algPara) {
+        String alg_args = "";
+        //测试多种条件下不同的输出情况 !!!==加上参数u让脚本实时输出==!!!
+        if (algName.equals("bayesnet")) {
+            alg_args = "python  -u " + PythonFilePath.bayesnet_python_alg + " " + repoName + " " + algPara;
+        } else if (algName.equals("")) {
+            alg_args = "python  -u " + PythonFilePath.xgboost_python_alg + " " + repoName + " " + algPara;
+        } else {
+            alg_args = "python  -u " + PythonFilePath.ranklib_python_alg + " " + repoName + " " +algName+" "+ algPara;
+        }
+
+        Future<String> future;
+        log.info("===================DataServiceImpl 现在的命令是args1：" + alg_args);
+        try {
+            //执行命令
+            Process process = Runtime.getRuntime().exec(alg_args);
+            Thread oThread = GetPythonOutputThread.printMessage(process.getInputStream(), process.getErrorStream());
+
+            oThread.join();
+            int exitVal = process.waitFor();
+            if (0 != exitVal) {
+                log.info("===================执行脚本失败");
+            }
+            log.info("===================执行脚本成功");
+
+            int status = process.waitFor();
+            log.info("===================Script exit code is:" + status);
+            future = new AsyncResult<String>("算法计算成功，结果已保存到数据库中可以查看");
+        } catch (Exception e) {
+            future = new AsyncResult<String>("算法失败，具体错误为：" + e);
+            e.printStackTrace();
+        }
+        return future;
     }
 
     @Override

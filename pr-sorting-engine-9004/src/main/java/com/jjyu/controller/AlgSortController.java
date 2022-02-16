@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 @Api(value = "prSorting/alg", tags = {"算法排序"})
 @Slf4j
@@ -61,12 +62,13 @@ public class AlgSortController {
     @ApiOperation(value = "重新训练某一算法模型此处应当为异步方法", notes = "reTrainAlg")
     public ResultForFront reTrainAlg(@RequestParam("repoName") String repoName,
                                      @RequestParam("algName") String algName,
-                                     @RequestParam("algPara") String algParam) {
+                                     @RequestParam("algPara") String algParam,
+                                     @RequestParam("userName") String userName) {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("repo_name", repoName);
         queryWrapper.eq("alg_name", algName);
-        List<AlgTestEval> list = algTestEvalService.list(queryWrapper);
-        return ResultForFront.succ(list);
+        Future<String> result = sortResultService.reTrainAlg(repoName, algName, algParam);
+        return ResultForFront.succ(result);
     }
 
     //3.重新计算某一算法/所有算法排序列表

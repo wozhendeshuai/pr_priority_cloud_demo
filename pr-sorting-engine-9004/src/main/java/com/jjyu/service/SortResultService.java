@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 public interface SortResultService extends IService<SortResult> {
     /**
@@ -45,7 +46,7 @@ public interface SortResultService extends IService<SortResult> {
      * @param algParam
      * @return
      */
-    public boolean reTrainAlg(String repoName, String algName, String algParam);
+    public Future<String> reTrainAlg(String repoName, String algName, String algParam);
 
     /**
      * 重新利用模型计算排序列表
