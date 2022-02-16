@@ -18,8 +18,8 @@ public class FeatureFilePathServiceImpl extends ServiceImpl<FeatureFilePathMappe
     public boolean createFeatureFile(String repoName, String fileToAlgName) {
         String feature_args = "";
         String open_feature_args = "";
-        if (!fileToAlgName.equals("bayesnet")) {
-            fileToAlgName = "rank_lib";
+        if (fileToAlgName.equals("bayesnet")) {
+           // fileToAlgName = "rank_lib";
             //测试多种条件下不同的输出情况 !!!==加上参数u让脚本实时输出==!!!
             feature_args = "python  -u " + PythonFilePath.bayesnet_feature_file_path + " " + repoName;
             open_feature_args = "python  -u " + PythonFilePath.bayesnet_open_feature_file_path + " " + repoName;

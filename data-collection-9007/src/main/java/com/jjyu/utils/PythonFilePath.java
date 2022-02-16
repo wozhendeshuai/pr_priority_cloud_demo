@@ -32,7 +32,7 @@ public class PythonFilePath {
     /**
      * 贝叶斯网络打开特征文件路径
      */
-    public static final String bayesnet_open_feature_file_path = " E:\\PycharmProjects\\nju_pr_project\\java_project\\data_processing_engineering\\project_rank_bayesnet_lib_data_process.py ";
+    public static final String bayesnet_open_feature_file_path = " E:\\PycharmProjects\\nju_pr_project\\java_project\\data_processing_engineering\\project_rank_bayesnet_open_lib_data_process.py ";
     /**
      * rank_lib训练测试特征文件训路径
      */
