@@ -19,6 +19,10 @@ spring:
           enabled: true # 自动依据nacos中的服务id生成路由
           lower-case-service-id: true #　小写服务id
       routes:
+        - id: pr-sorting
+          uri: lb://pr-sorting-engine-9004 #找到在nacos上相同服务名的ip
+          predicates:
+            - Path=/prSorting/** #匹配后提供服务的路由地址
         - id: project-manage
           uri: lb://project-manage-9003 #找到在nacos上相同服务名的ip
           predicates:

@@ -87,7 +87,7 @@ public class SortResultServiceImpl extends ServiceImpl<SortResultMapper, SortRes
         //测试多种条件下不同的输出情况 !!!==加上参数u让脚本实时输出==!!!
         if (algName.equals("bayesnet")) {
             alg_args = "python  -u " + PythonFilePath.bayesnet_python_alg + " " + repoName + " " + algPara;
-        } else if (algName.equals("")) {
+        } else if (algName.equals("xgboost")) {
             alg_args = "python  -u " + PythonFilePath.xgboost_python_alg + " " + repoName + " " + algPara;
         } else {
             alg_args = "python  -u " + PythonFilePath.ranklib_python_alg + " " + repoName + " " +algName+" "+ algPara;
