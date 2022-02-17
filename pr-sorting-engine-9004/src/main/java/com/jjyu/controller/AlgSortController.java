@@ -2,6 +2,7 @@ package com.jjyu.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jjyu.entity.AlgTestEval;
+import com.jjyu.entity.PRSelfEntity;
 import com.jjyu.entity.SortResult;
 import com.jjyu.service.AlgTestEvalService;
 import com.jjyu.service.SortResultService;
@@ -53,7 +54,7 @@ public class AlgSortController {
                                        @RequestParam("algName") String algName) {
 
         String dateTime = DateTimeUtil.getDate();
-        List<SortResult> list = sortResultService.getSortListByOrder(repoName, dateTime, algName);
+        List<PRSelfEntity> list = sortResultService.getSortListByOrder(repoName, dateTime, algName);
         return ResultForFront.succ(list);
     }
 

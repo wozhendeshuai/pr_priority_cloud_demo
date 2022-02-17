@@ -19,7 +19,7 @@ public interface SortResultService extends IService<SortResult> {
      * @param algName
      * @return
      */
-    List<SortResult> getSortListByOrder(String repoName, String dateTime, String algName);
+    List<PRSelfEntity> getSortListByOrder(String repoName, String dateTime, String algName);
 
     /**
      * 从数据处理微服务获取PR数据

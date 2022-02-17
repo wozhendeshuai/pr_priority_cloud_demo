@@ -123,7 +123,7 @@ public class SortResultServiceImpl extends ServiceImpl<SortResultMapper, SortRes
     }
 
     @Override
-    public List<SortResult> getSortListByOrder(String repoName, String dateTime, String algName) {
+    public List<PRSelfEntity> getSortListByOrder(String repoName, String dateTime, String algName) {
         //查询是否已有pr相关定时任务
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("repo_name", repoName);
@@ -132,6 +132,18 @@ public class SortResultServiceImpl extends ServiceImpl<SortResultMapper, SortRes
         List<SortResult> temp = this.baseMapper.selectList(queryWrapper);
         //按照prOrder升序排列
         temp.sort(Comparator.comparingInt(o -> o.getPrOrder()));
-        return temp;
+        //根据顺序组装成想要的返回结果
+        List<PRSelfEntity> tempList = getPRDataFromDataCollection(repoName);
+        List<PRSelfEntity> reList=new ArrayList<>();
+        for(SortResult sortResult:temp){
+            for(PRSelfEntity prSelf:tempList){
+                if(prSelf.getPrNumber().equals(sortResult.getPrNumber()))
+                {
+                    reList.add(prSelf);
+                    break;
+                }
+            }
+        }
+        return reList;
     }
 }
