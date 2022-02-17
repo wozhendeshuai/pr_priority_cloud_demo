@@ -23,7 +23,7 @@ spring:
           uri: lb://project-manage-9003 #找到在nacos上相同服务名的ip
           predicates:
             - Path=/project/** #匹配后提供服务的路由地址
-        - id: data-collection-9007
+        - id: data-collection
           uri: lb://data-collection-9007 #找到在nacos上相同服务名的ip
           predicates:
             - Path=/dataCollection/** #匹配后提供服务的路由地址

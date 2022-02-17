@@ -29,6 +29,44 @@ public class UserController {
     private RepoBaseService repoBaseService;
     @Autowired
     private UserTeamService userTeamService;
+
+    /**
+     * 用户信息
+     *
+     * @return
+     */
+    @ApiOperation(value = "userInfo", notes = "userInfo")
+    @GetMapping("/userInfo")
+    public ResultForFront userInfo(@RequestParam("userName") String userName) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("user_name", userName);
+//        queryWrapper.eq("password", userBaseEntity.getPassword());
+        UserBaseEntity userBaseEntityTemp = userService.getOne(queryWrapper);
+        if (userBaseEntityTemp == null) {
+            return ResultForFront.fail("无该用户");
+        }
+        return ResultForFront.succ(userBaseEntityTemp);
+    }
+
+    /**
+     * 用户登录
+     *
+     * @return
+     */
+    @ApiOperation(value = "login", notes = "login")
+    @PostMapping("/login")
+    public ResultForFront login(UserBaseEntity userBaseEntity) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("user_name", userBaseEntity.getUserName());
+//        queryWrapper.eq("password", userBaseEntity.getPassword());
+        UserBaseEntity userBaseEntityTemp = userService.getOne(queryWrapper);
+        if (userBaseEntityTemp == null) {
+            return ResultForFront.fail("无该用户");
+        } else if (!userBaseEntityTemp.getPassword().equals(userBaseEntity.getPassword())) {
+            return ResultForFront.fail("密码错误");
+        }
+        return ResultForFront.succ(userBaseEntityTemp);
+    }
     //1.用户基础信息的修改
 
     /**
