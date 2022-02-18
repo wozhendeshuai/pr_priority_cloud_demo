@@ -3,6 +3,7 @@ package com.jjyu.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -35,6 +36,7 @@ public class AlgTestEval implements Serializable {
      * 测试的日期
      */
     @TableField("test_day")
+    @JsonFormat(pattern = "yyyy年MM月dd日", timezone = "Asia/Shanghai")
     private Date testDay;
     /**
      * ndcg
@@ -50,7 +52,7 @@ public class AlgTestEval implements Serializable {
      * ndcg
      */
     @TableField("kendall_tau_distance")
-    private double kendall_tau_distance;
+    private double kendallTauDistance;
 
 
 }

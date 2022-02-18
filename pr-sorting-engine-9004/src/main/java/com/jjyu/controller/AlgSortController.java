@@ -11,6 +11,7 @@ import com.jjyu.utils.ResultForFront;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -89,10 +90,20 @@ public class AlgSortController {
     @ApiOperation(value = "获取排序列表在测试集上的三个指标效果列表", notes = "listEval")
     public ResultForFront getlistEval(@RequestParam("repoName") String repoName,
                                       @RequestParam("algName") String algName) {
+        String dateTime = DateTimeUtil.getDate();
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("repo_name", repoName);
         queryWrapper.eq("alg_name", algName);
+        queryWrapper.eq("train_day", dateTime);
         List<AlgTestEval> list = algTestEvalService.list(queryWrapper);
+        if (ObjectUtils.isEmpty(list)) {
+            if(ObjectUtils.isEmpty(repoName)){
+                return ResultForFront.fail("传参出错repoName为空");
+            }else if(ObjectUtils.isEmpty(algName)){
+                return ResultForFront.fail("传参出错sortRule为空");
+            }
+            return ResultForFront.fail("后端prSorting/alg/getlistEval出错");
+        }
         return ResultForFront.succ(list);
     }
 }
