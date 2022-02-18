@@ -36,7 +36,7 @@ public interface SortResultService extends IService<SortResult> {
      * @param sortRule
      * @return
      */
-    List<SortResult> getPRDataBySortRule(String repoName, String sortRule);
+    List<PRSelfEntity> getPRDataBySortRule(String repoName, String sortRule);
 
     /**
      * 重新训练模型

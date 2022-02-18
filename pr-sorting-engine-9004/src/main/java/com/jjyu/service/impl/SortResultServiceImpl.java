@@ -54,7 +54,7 @@ public class SortResultServiceImpl extends ServiceImpl<SortResultMapper, SortRes
     }
 
     @Override
-    public List<SortResult> getPRDataBySortRule(String repoName, String sortRule) {
+    public List<PRSelfEntity> getPRDataBySortRule(String repoName, String sortRule) {
         List<PRSelfEntity> tempList = getPRDataFromDataCollection(repoName);
         if ((sortRule).equalsIgnoreCase("createtime")) {
             SortRuleContext sortRuleContext = new SortRuleContext(new CreateTimeSort());
@@ -63,21 +63,22 @@ public class SortResultServiceImpl extends ServiceImpl<SortResultMapper, SortRes
             SortRuleContext sortRuleContext = new SortRuleContext(new ChangeFileSort());
             tempList = sortRuleContext.executeStrategy(tempList);
         }
-
-        String dateTime = DateTimeUtil.getDate();
-        List<SortResult> reList = new ArrayList<>();
-
-        for (int i = 0; i < tempList.size(); i++) {
-            PRSelfEntity tempPREntity = tempList.get(i);
-            SortResult sortResult = new SortResult();
-            sortResult.setPrNumber(tempPREntity.getPrNumber());
-            sortResult.setSortDay(dateTime);
-            sortResult.setAlgName(sortRule);
-            sortResult.setRepoName(repoName);
-            sortResult.setPrOrder(i);
-            reList.add(sortResult);
-        }
-        return reList;
+        return tempList;
+//
+//        String dateTime = DateTimeUtil.getDate();
+//        List<SortResult> reList = new ArrayList<>();
+//
+//        for (int i = 0; i < tempList.size(); i++) {
+//            PRSelfEntity tempPREntity = tempList.get(i);
+//            SortResult sortResult = new SortResult();
+//            sortResult.setPrNumber(tempPREntity.getPrNumber());
+//            sortResult.setSortDay(dateTime);
+//            sortResult.setAlgName(sortRule);
+//            sortResult.setRepoName(repoName);
+//            sortResult.setPrOrder(i);
+//            reList.add(sortResult);
+//        }
+//        return reList;
     }
 
     @Async("taskExecutor")
