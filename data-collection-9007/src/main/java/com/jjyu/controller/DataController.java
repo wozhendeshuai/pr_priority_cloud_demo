@@ -2,6 +2,7 @@ package com.jjyu.controller;
 
 
 import cn.hutool.core.map.MapUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jjyu.entity.PRSelfEntity;
 import com.jjyu.entity.RepoBaseEntity;
 import com.jjyu.service.DataService;
@@ -38,6 +39,31 @@ public class DataController {
 
         log.info("=============getOpenData执行结束");
         return ResultForFront.succ(allOpenPRList);
+    }
+
+    @GetMapping("/getAllData")
+    @ApiOperation(value = "getAllData", notes = "获取所有PR的相信信息")
+    public ResultForFront getAllData(
+            @RequestParam("repoName") String repoName) {
+        log.info("=============getAllData执行开始");
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("repo_name", repoName);
+        List<PRSelfEntity> allPRList = prSelfService.list(queryWrapper);
+        log.info("=============getAllData执行结束");
+        return ResultForFront.succ(allPRList);
+    }
+
+    @GetMapping("/getPRData")
+    @ApiOperation(value = "getPRData", notes = "获取一个PR的相信信息")
+    public ResultForFront getPRData(
+            @RequestParam("repoName") String repoName, @RequestParam("prNumber") Integer prNumber) {
+        log.info("=============getAllData执行开始");
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("repo_name", repoName);
+        queryWrapper.eq("pr_number", prNumber);
+        PRSelfEntity prSelfEntity = prSelfService.getOne(queryWrapper);
+        log.info("=============getAllData执行结束");
+        return ResultForFront.succ(prSelfEntity);
     }
 
     @PostMapping("/synData")

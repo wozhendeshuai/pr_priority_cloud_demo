@@ -3,7 +3,26 @@ package com.jjyu.service;
 
 import com.jjyu.entity.PRDetail;
 
+import java.util.List;
+
 public interface PRBaseService {
+    /**
+     * 获取所有PR的编号和标题
+     *
+     * @param repoName
+     * @return
+     */
+    List<String> listPRNumberAndTitle(String repoName);
+
+    /**
+     * 获取某个PR的详细信息
+     *
+     * @param repoName
+     * @param prNumber
+     * @return
+     */
+    PRDetail getOnePRDetail(String repoName, Integer prNumber);
+
     //1.新建PR
     boolean newPR(String userName, String repoName);
 
