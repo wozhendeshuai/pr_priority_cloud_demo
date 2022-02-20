@@ -102,7 +102,7 @@ public class AlgSortController {
             }else if(ObjectUtils.isEmpty(algName)){
                 return ResultForFront.fail("传参出错sortRule为空");
             }
-            return ResultForFront.fail("后端prSorting/alg/getlistEval出错");
+            return ResultForFront.fail("今日还未训练模型，还请先手动训练。");
         }
         return ResultForFront.succ(list);
     }

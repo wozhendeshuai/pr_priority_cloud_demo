@@ -84,6 +84,13 @@ public class SortResultServiceImpl extends ServiceImpl<SortResultMapper, SortRes
     @Async("taskExecutor")
     @Override
     public Future<String> reTrainAlg(String repoName, String algName, String algPara) {
+        //首先去数据处理微服务去看看是否已经有了路径，若是没有特征文件路径则应当先去训练下哈
+        //拼接URL
+        String path = String.format(serviceurl + "/dataCollection/featureFile/getFeatureFilePath?repoName=" + repoName + "&fileToAlgName=" + algName);//
+        log.info("============path:  " + path);
+        Map<String, Object> templateForObject = restTemplate.getForObject(path, Map.class);
+        log.info("=============数据处理微服务特征文件路径获取返回值为："+(String) templateForObject.get("data"));
+
         String alg_args = "";
         //测试多种条件下不同的输出情况 !!!==加上参数u让脚本实时输出==!!!
         if (algName.equals("bayesnet")) {
@@ -91,7 +98,7 @@ public class SortResultServiceImpl extends ServiceImpl<SortResultMapper, SortRes
         } else if (algName.equals("xgboost")) {
             alg_args = "python  -u " + PythonFilePath.xgboost_python_alg + " " + repoName + " " + algPara;
         } else {
-            alg_args = "python  -u " + PythonFilePath.ranklib_python_alg + " " + repoName + " " +algName+" "+ algPara;
+            alg_args = "python  -u " + PythonFilePath.ranklib_python_alg + " " + repoName + " " + algName + " " + algPara;
         }
 
         Future<String> future;
@@ -135,11 +142,10 @@ public class SortResultServiceImpl extends ServiceImpl<SortResultMapper, SortRes
         temp.sort(Comparator.comparingInt(o -> o.getPrOrder()));
         //根据顺序组装成想要的返回结果
         List<PRSelfEntity> tempList = getPRDataFromDataCollection(repoName);
-        List<PRSelfEntity> reList=new ArrayList<>();
-        for(SortResult sortResult:temp){
-            for(PRSelfEntity prSelf:tempList){
-                if(prSelf.getPrNumber().equals(sortResult.getPrNumber()))
-                {
+        List<PRSelfEntity> reList = new ArrayList<>();
+        for (SortResult sortResult : temp) {
+            for (PRSelfEntity prSelf : tempList) {
+                if (prSelf.getPrNumber().equals(sortResult.getPrNumber())) {
                     reList.add(prSelf);
                     break;
                 }
