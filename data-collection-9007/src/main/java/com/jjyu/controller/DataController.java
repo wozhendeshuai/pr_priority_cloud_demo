@@ -3,19 +3,19 @@ package com.jjyu.controller;
 
 import cn.hutool.core.map.MapUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.jjyu.entity.PRFileEntity;
 import com.jjyu.entity.PRSelfEntity;
 import com.jjyu.entity.RepoBaseEntity;
 import com.jjyu.service.DataService;
+import com.jjyu.service.PRFileService;
 import com.jjyu.service.PRSelfService;
 import com.jjyu.utils.ResultForFront;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +28,40 @@ public class DataController {
     private DataService dataService;
     @Autowired
     private PRSelfService prSelfService;
+    @Autowired
+    private PRFileService prFileService;
+
+    @GetMapping("/getPRFile")
+    @ApiOperation(value = "getPRFile", notes = "getPRFile")
+    public ResultForFront getPRFile(@RequestParam("repoName") String repoName,
+                                    @RequestParam("prNumber") String prNumber) {
+        log.info("=============getPRFile执行开始");
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("repo_name", repoName);
+        queryWrapper.eq("pr_number", prNumber);
+
+        List<PRFileEntity> allPRFile = prFileService.list(queryWrapper);
+
+        log.info("=============getPRFile执行结束");
+        return ResultForFront.succ(allPRFile);
+    }
+
+    @GetMapping("/getPRFileDetail")
+    @ApiOperation(value = "getPRFileDetail", notes = "getPRFileDetail")
+    public ResultForFront getPRFileDetail(@RequestParam("repoName") String repoName,
+                                          @RequestParam("prNumber") String prNumber,
+                                          @RequestParam("fileName") String fileName) {
+        log.info("=============getPRFileDetail执行开始");
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("repo_name", repoName);
+        queryWrapper.eq("pr_number", prNumber);
+        queryWrapper.eq("changed_file_name", fileName);
+
+        PRFileEntity prFile = prFileService.getOne(queryWrapper);
+
+        log.info("=============getPRFileDetail执行结束");
+        return ResultForFront.succ(prFile);
+    }
 
     @GetMapping("/getOpenData")
     @ApiOperation(value = "getOpenData", notes = "getOpenData")

@@ -2,6 +2,7 @@ package com.jjyu.service;
 
 
 import com.jjyu.entity.PRDetail;
+import com.jjyu.entity.PRFileDetail;
 
 import java.util.List;
 
@@ -40,4 +41,8 @@ public interface PRBaseService {
 
     //5.评审PR
     boolean reviewPR(String userName, String prNumber, String repoName, String reviewContent);
+
+    List<String> listPRFileList(String repoName, String prNumber);
+
+    PRFileDetail getPRFileDetail(String repoName, String prNumber,String fileName);
 }

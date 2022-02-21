@@ -2,8 +2,7 @@ package com.jjyu.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.jjyu.entity.PRDetail;
-import com.jjyu.entity.SortResult;
-import com.jjyu.entity.SortedPRDetail;
+import com.jjyu.entity.PRFileDetail;
 import com.jjyu.service.PRBaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +22,37 @@ public class PRBaseServiceImpl implements PRBaseService {
 
     private String sortServiceurl = "http://localhost:9004";//"pr-sorting-engine-9004"; // //"http://pr-gateway-9001";
     private String dataServiceurl = "http://localhost:9007"; //"http://pr-gateway-9001";
+
+    @Override
+    public List<String> listPRFileList(String repoName, String prNumber) {
+        //获取规则排序结果
+        String path = String.format(dataServiceurl + "/dataCollection/data/getPRFile?repoName=" + repoName + "&prNumber=" + prNumber);//
+        log.info("============path:  " + path);
+        Map<String, Object> templateForPRList = restTemplate.getForObject(path, Map.class);
+        List prFileList = (List) templateForPRList.get("data");
+        //准备返回数据
+        List<String> reList = new ArrayList<>();
+        for (int i = 0; i < prFileList.size(); i++) {
+            PRFileDetail prFileDetail = JSON.parseObject(JSON.toJSONString(prFileList.get(i)), PRFileDetail.class);
+            reList.add(prFileDetail.getChangedFileName());
+        }
+
+        List<PRFileDetail> prFileDetailList = new ArrayList<>();
+        return reList;
+
+    }
+
+    @Override
+    public PRFileDetail getPRFileDetail(String repoName, String prNumber, String fileName) {
+        //获取规则排序结果
+        String path = String.format(dataServiceurl + "/dataCollection/data/getPRFileDetail?repoName=" + repoName + "&prNumber=" + prNumber + "&fileName=" + fileName);//
+        log.info("============path:  " + path);
+        Map<String, Object> templateForPRList = restTemplate.getForObject(path, Map.class);
+
+        PRFileDetail prFileDetail = JSON.parseObject(JSON.toJSONString(templateForPRList.get("data")), PRFileDetail.class);
+        log.info("============prFileDetail:  " + prFileDetail);
+        return prFileDetail;
+    }
 
     public List<String> listPRNumberAndTitle(String repoName) {
         //获取规则排序结果
@@ -97,4 +126,6 @@ public class PRBaseServiceImpl implements PRBaseService {
     public boolean reviewPR(String userName, String prNumber, String repoName, String reviewContent) {
         return false;
     }
+
+
 }

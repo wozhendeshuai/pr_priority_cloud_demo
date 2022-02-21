@@ -1,6 +1,7 @@
 package com.jjyu.controller;
 
 import com.jjyu.entity.PRDetail;
+import com.jjyu.entity.PRFileDetail;
 import com.jjyu.service.PRBaseService;
 import com.jjyu.utils.ResultForFront;
 import io.swagger.annotations.Api;
@@ -28,7 +29,7 @@ public class PRBaseController {
     @GetMapping("getPRNumberAndTitle")
     public ResultForFront getPRNumberAndTitle(@RequestParam("userName") String userName,
                                               @RequestParam("repoName") String repoName) {
-        if(ObjectUtils.isEmpty(repoName)){
+        if (ObjectUtils.isEmpty(repoName)) {
             return ResultForFront.fail("未选择项目，请选择！");
         }
         List<String> prNumbers = prBaseService.listPRNumberAndTitle(repoName);
@@ -37,6 +38,36 @@ public class PRBaseController {
         }
         return ResultForFront.succ(prNumbers);
     }
+
+    @ApiOperation(value = "getPRFileList", notes = "获取PR中所有修改的文件列表")
+    @GetMapping("getPRFileList")
+    public ResultForFront getPRFileList(@RequestParam("userName") String userName,
+                                        @RequestParam("repoName") String repoName,
+                                        @RequestParam("prNumber") String prNumber) {
+        if (ObjectUtils.isEmpty(repoName)) {
+            return ResultForFront.fail("未选择项目，请选择！");
+        }
+        List<String> prFileNameList = prBaseService.listPRFileList(repoName, prNumber);
+        if (ObjectUtils.isEmpty(prFileNameList)) {
+            return ResultForFront.fail("后端getPRFileList出错");
+        }
+        return ResultForFront.succ(prFileNameList);
+    }
+
+    @ApiOperation(value = "getPRFileDetail", notes = "获取PR中所有修改的文件列表")
+    @GetMapping("getPRFileDetail")
+    public ResultForFront getPRFileDetail(@RequestParam("userName") String userName,
+                                          @RequestParam("repoName") String repoName,
+                                          @RequestParam("prNumber") String prNumber,
+                                          @RequestParam("fileName") String fileName) {
+
+        PRFileDetail prFileDetail = prBaseService.getPRFileDetail(repoName, prNumber, fileName);
+        if (ObjectUtils.isEmpty(prFileDetail)) {
+            return ResultForFront.fail("后端getPRFileDetail出错");
+        }
+        return ResultForFront.succ(prFileDetail);
+    }
+
 
     @ApiOperation(value = "getPRDetail", notes = "获取项目中某个PR的详情信息")
     @GetMapping("getPRDetail")
