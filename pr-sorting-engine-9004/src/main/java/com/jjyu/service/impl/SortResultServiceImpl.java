@@ -90,13 +90,14 @@ public class SortResultServiceImpl extends ServiceImpl<SortResultMapper, SortRes
         String path = String.format(serviceurl + "/dataCollection/featureFile/getFeatureFilePath?repoName=" + repoName + "&fileToAlgName=" + algName);//
         log.info("============path:  " + path);
         Map<String, Object> templateForObject = restTemplate.getForObject(path, Map.class);
-        log.info("=============数据处理微服务特征文件路径获取返回值为：" + (String) templateForObject.get("data"));
+        log.info("=============数据处理微服务特征文件路径获取返回值为：" + templateForObject);
         if (ObjectUtils.isEmpty(templateForObject.get("data")) || newFeatureFile) {
             String newFeaturepath = String.format(serviceurl + "/dataCollection/featureFile/getNewFeatureFile?repoName=" + repoName + "&fileToAlgName=" + algName);//
-            log.info("============path:  " + path);
-            restTemplate.getForObject(newFeaturepath, Map.class);
+            log.info("============path:  " + newFeaturepath);
+            templateForObject = restTemplate.getForObject(newFeaturepath, Map.class);
+            log.info("=============数据处理微服务特征文件路径获取返回值为：" + templateForObject);
             templateForObject = restTemplate.getForObject(path, Map.class);
-            while (!ObjectUtils.isEmpty(templateForObject.get("data"))) {
+            while (ObjectUtils.isEmpty(templateForObject.get("data"))) {
                 try {
                     Thread.sleep(2000);
                     templateForObject = restTemplate.getForObject(path, Map.class);

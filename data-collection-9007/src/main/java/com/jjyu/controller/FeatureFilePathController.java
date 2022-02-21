@@ -16,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -45,11 +46,16 @@ public class FeatureFilePathController {
         log.info("=============getFeatureFilePath执行开始");
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("repo_name", repoName);
-        queryWrapper.eq("file_to_alg_name", fileToAlgName);
+        if (fileToAlgName.equals("bayesnet")) {
+            queryWrapper.eq("file_to_alg_name", fileToAlgName);
+        }else{
+            queryWrapper.eq("file_to_alg_name", "rank_lib");
+        }
+
         queryWrapper.eq("create_time", DateTimeUtil.getDate());
         List<FeatureFilePathEntity> filePathEntityList = featureFilePathService.list(queryWrapper);
         log.info("=============getFeatureFilePath执行结束");
-        return ResultForFront.succ(filePathEntityList);
+        return ResultForFront.succ(filePathEntityList == null ? "" : filePathEntityList);
     }
 
     /**
@@ -61,6 +67,7 @@ public class FeatureFilePathController {
      */
     @GetMapping("/getNewFeatureFile")
     @ApiOperation(value = "getNewFeatureFile", notes = "重新计算特征文件")
+    @Async("taskExecutor")
     public ResultForFront getNewFeatureFile(@RequestParam("repoName") String repoName,
                                             @RequestParam("fileToAlgName") String fileToAlgName) {
 

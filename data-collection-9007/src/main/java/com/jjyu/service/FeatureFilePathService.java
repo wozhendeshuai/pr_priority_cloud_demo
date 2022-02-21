@@ -6,5 +6,5 @@ import com.jjyu.entity.PRUserEntity;
 
 public interface FeatureFilePathService extends IService<FeatureFilePathEntity> {
 
-    boolean createFeatureFile(String repoName, String fileToAlgName);
+    void createFeatureFile(String repoName, String fileToAlgName);
 }

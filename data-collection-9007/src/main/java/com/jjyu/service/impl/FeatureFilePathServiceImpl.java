@@ -1,34 +1,49 @@
 package com.jjyu.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jjyu.entity.FeatureFilePathEntity;
 import com.jjyu.mapper.FeatureFilePathMapper;
 import com.jjyu.service.FeatureFilePathService;
+import com.jjyu.utils.DateTimeUtil;
 import com.jjyu.utils.GetPythonOutputThread;
 import com.jjyu.utils.PythonFilePath;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 @Service
 @Slf4j
 public class FeatureFilePathServiceImpl extends ServiceImpl<FeatureFilePathMapper, FeatureFilePathEntity> implements FeatureFilePathService {
 
+    @Resource
+    private FeatureFilePathMapper featureFilePathMapper;
 
-    @Async
     @Override
-    public boolean createFeatureFile(String repoName, String fileToAlgName) {
+    @Async("taskExecutor")
+    public void createFeatureFile(String repoName, String fileToAlgName) {
         String feature_args = "";
         String open_feature_args = "";
+        String today = DateTimeUtil.getDate();
+        QueryWrapper queryWrapper=new QueryWrapper();
+        queryWrapper.eq("repo_name",repoName);
+        queryWrapper.eq("create_time",today);
         if (fileToAlgName.equals("bayesnet")) {
            // fileToAlgName = "rank_lib";
             //测试多种条件下不同的输出情况 !!!==加上参数u让脚本实时输出==!!!
+            queryWrapper.eq("file_to_alg_name", fileToAlgName);
+
             feature_args = "python  -u " + PythonFilePath.bayesnet_feature_file_path + " " + repoName;
             open_feature_args = "python  -u " + PythonFilePath.bayesnet_open_feature_file_path + " " + repoName;
         } else {
+            queryWrapper.eq("file_to_alg_name", "rank_lib");
             feature_args = "python  -u " + PythonFilePath.rank_lib_feature_file_path + " " + repoName;
             open_feature_args = "python  -u " + PythonFilePath.rank_lib_open_feature_file_path + " " + repoName;
         }
+        featureFilePathMapper.delete(queryWrapper);
         //初始化PR特征文件
         log.info("===================createFeatureFile 现在的命令是feature_args：" + feature_args);
         try {
@@ -67,7 +82,7 @@ public class FeatureFilePathServiceImpl extends ServiceImpl<FeatureFilePathMappe
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return true;
+
 
     }
 }
