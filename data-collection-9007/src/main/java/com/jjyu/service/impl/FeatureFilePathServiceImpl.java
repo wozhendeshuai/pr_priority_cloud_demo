@@ -7,6 +7,7 @@ import com.jjyu.service.FeatureFilePathService;
 import com.jjyu.utils.GetPythonOutputThread;
 import com.jjyu.utils.PythonFilePath;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 public class FeatureFilePathServiceImpl extends ServiceImpl<FeatureFilePathMapper, FeatureFilePathEntity> implements FeatureFilePathService {
 
 
+    @Async
     @Override
     public boolean createFeatureFile(String repoName, String fileToAlgName) {
         String feature_args = "";

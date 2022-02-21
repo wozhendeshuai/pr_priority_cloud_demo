@@ -48,13 +48,26 @@ public class FeatureFilePathController {
         queryWrapper.eq("file_to_alg_name", fileToAlgName);
         queryWrapper.eq("create_time", DateTimeUtil.getDate());
         List<FeatureFilePathEntity> filePathEntityList = featureFilePathService.list(queryWrapper);
-        if (ObjectUtils.isEmpty(filePathEntityList)) {
-            featureFilePathService.createFeatureFile(repoName, fileToAlgName);
-            filePathEntityList = featureFilePathService.list(queryWrapper);
-        }
         log.info("=============getFeatureFilePath执行结束");
         return ResultForFront.succ(filePathEntityList);
     }
 
+    /**
+     * 重新计算特征文件
+     *
+     * @param repoName
+     * @param fileToAlgName
+     * @return
+     */
+    @GetMapping("/getNewFeatureFile")
+    @ApiOperation(value = "getNewFeatureFile", notes = "重新计算特征文件")
+    public ResultForFront getNewFeatureFile(@RequestParam("repoName") String repoName,
+                                            @RequestParam("fileToAlgName") String fileToAlgName) {
+
+
+        featureFilePathService.createFeatureFile(repoName, fileToAlgName);
+        log.info("=============getNewFeatureFile执行中");
+        return ResultForFront.succ("=============getNewFeatureFile执行中");
+    }
 
 }

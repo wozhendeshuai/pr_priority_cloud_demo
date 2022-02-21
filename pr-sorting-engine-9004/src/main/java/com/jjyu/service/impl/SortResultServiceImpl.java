@@ -14,6 +14,7 @@ import com.jjyu.utils.SortRuleContext;
 import com.jjyu.utils.strategy.ChangeFileSort;
 import com.jjyu.utils.strategy.CreateTimeSort;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
@@ -83,13 +84,28 @@ public class SortResultServiceImpl extends ServiceImpl<SortResultMapper, SortRes
 
     @Async("taskExecutor")
     @Override
-    public Future<String> reTrainAlg(String repoName, String algName, String algPara) {
+    public Future<String> reTrainAlg(String repoName, String algName, String algPara, Boolean newFeatureFile) {
         //首先去数据处理微服务去看看是否已经有了路径，若是没有特征文件路径则应当先去训练下哈
         //拼接URL
         String path = String.format(serviceurl + "/dataCollection/featureFile/getFeatureFilePath?repoName=" + repoName + "&fileToAlgName=" + algName);//
         log.info("============path:  " + path);
         Map<String, Object> templateForObject = restTemplate.getForObject(path, Map.class);
-        log.info("=============数据处理微服务特征文件路径获取返回值为："+(String) templateForObject.get("data"));
+        log.info("=============数据处理微服务特征文件路径获取返回值为：" + (String) templateForObject.get("data"));
+        if (ObjectUtils.isEmpty(templateForObject.get("data")) || newFeatureFile) {
+            String newFeaturepath = String.format(serviceurl + "/dataCollection/featureFile/getNewFeatureFile?repoName=" + repoName + "&fileToAlgName=" + algName);//
+            log.info("============path:  " + path);
+            restTemplate.getForObject(newFeaturepath, Map.class);
+            templateForObject = restTemplate.getForObject(path, Map.class);
+            while (!ObjectUtils.isEmpty(templateForObject.get("data"))) {
+                try {
+                    Thread.sleep(2000);
+                    templateForObject = restTemplate.getForObject(path, Map.class);
+                    log.info("=============数据处理微服务特征文件路径获取返回值为：" + templateForObject.get("data"));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
         String alg_args = "";
         //测试多种条件下不同的输出情况 !!!==加上参数u让脚本实时输出==!!!

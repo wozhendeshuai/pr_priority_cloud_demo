@@ -46,7 +46,7 @@ public interface SortResultService extends IService<SortResult> {
      * @param algParam
      * @return
      */
-    public Future<String> reTrainAlg(String repoName, String algName, String algParam);
+    public Future<String> reTrainAlg(String repoName, String algName, String algParam,Boolean newFeatureFile);
 
     /**
      * 重新利用模型计算排序列表

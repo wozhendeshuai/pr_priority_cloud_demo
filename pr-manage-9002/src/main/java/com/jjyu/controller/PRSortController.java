@@ -1,13 +1,17 @@
 package com.jjyu.controller;
 
 import com.jjyu.entity.PRTask;
+import com.jjyu.entity.SortedPRDetail;
 import com.jjyu.service.PRSortService;
 import com.jjyu.utils.ResultForFront;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Api(value = "prManage/sort", tags = {"PR排序操作"})
 @Slf4j
@@ -22,8 +26,11 @@ public class PRSortController {
     @GetMapping("listRule")
     public ResultForFront listRule(@RequestParam("repoName") String repoName,
                                    @RequestParam("sortRule") String sortRule) {
-
-        return ResultForFront.succ(prSortService.listRule(repoName, sortRule));
+        List<SortedPRDetail> sortedPRDetails = prSortService.listRule(repoName, sortRule);
+        if(ObjectUtils.isEmpty(sortedPRDetails)){
+            return ResultForFront.fail(repoName+"今日份排序结果未训练，需手动训练");
+        }
+        return ResultForFront.succ(sortedPRDetails);
     }
 
     //1.2.查看算法排序列表

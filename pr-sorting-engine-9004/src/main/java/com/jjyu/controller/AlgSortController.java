@@ -65,11 +65,12 @@ public class AlgSortController {
     public ResultForFront reTrainAlg(@RequestParam("repoName") String repoName,
                                      @RequestParam("algName") String algName,
                                      @RequestParam("algPara") String algParam,
+                                     @RequestParam("newFeature") Boolean newFeature,
                                      @RequestParam("userName") String userName) {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("repo_name", repoName);
         queryWrapper.eq("alg_name", algName);
-        Future<String> result = sortResultService.reTrainAlg(repoName, algName, algParam);
+        Future<String> result = sortResultService.reTrainAlg(repoName, algName, algParam, newFeature);
         return ResultForFront.succ(result);
     }
 
@@ -97,9 +98,9 @@ public class AlgSortController {
         queryWrapper.eq("train_day", dateTime);
         List<AlgTestEval> list = algTestEvalService.list(queryWrapper);
         if (ObjectUtils.isEmpty(list)) {
-            if(ObjectUtils.isEmpty(repoName)){
+            if (ObjectUtils.isEmpty(repoName)) {
                 return ResultForFront.fail("传参出错repoName为空");
-            }else if(ObjectUtils.isEmpty(algName)){
+            } else if (ObjectUtils.isEmpty(algName)) {
                 return ResultForFront.fail("传参出错sortRule为空");
             }
             return ResultForFront.fail("今日还未训练模型，还请先手动训练。");
