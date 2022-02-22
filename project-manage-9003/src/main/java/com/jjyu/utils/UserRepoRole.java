@@ -4,10 +4,10 @@ import org.apache.commons.lang3.StringUtils;
 
 public enum UserRepoRole {
 
-    GUEST("guest", "访客非本代码仓成员可以创建，查看，评论PR"),
-    CONTRIBUTOR("contributor", "本代码仓贡献者可以创建，查看，查看自己的，评论PR"),
-    MEMBER("member", "本代码仓核心成员,可以创建，查看所有的，评论，评审PR"),
-    ADMIN("admin", "本代码仓管理员，可以创建，查看所有的，评论，评审PR，同时可以更新模型");
+    GUEST("NONE", "访客非本代码仓成员可以创建，查看，评论PR"),
+    CONTRIBUTOR("CONTRIBUTOR", "本代码仓贡献者可以创建，查看，查看自己的，评论PR"),
+    MEMBER("MEMBER", "本代码仓核心成员,可以创建，查看所有的，评论，评审PR"),
+    ADMIN("ADMIN", "本代码仓管理员，可以创建，查看所有的，评论，评审PR，同时可以更新模型");
     private String userRole;
     private String explain;
 

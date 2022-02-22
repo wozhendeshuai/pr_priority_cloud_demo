@@ -23,29 +23,28 @@ import java.util.Map;
 @RequestMapping("project/test")
 @Slf4j
 public class ProjectTestController {
-    @Value("${server.port}")
-    private int port;
+
     @Autowired
     private LoadBalancerClient loadBalancerClient;
     @Autowired
     private RestTemplate restTemplate;
 
-    //@RequestParam("prId") String prId,@RequestParam("fileId") String fileId
-    @ApiOperation(value = "测试port", notes = "testport")
-    @GetMapping("/testport")
-    public Map<String, Object> findPRselfAndFile() {
-        log.info("=============ProjectTestController调用到啦");
-//        ServiceInstance serviceInstance = loadBalancerClient.choose("PRFileApplication");
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("status", true);
-//        map.put("msg", "当前调用的是PR服务，查询PR的id：" + prId + " 查询的PRfile为：" + fileId);
-//        String path=String.format(serviceInstance+"/prfile/find?id=%s",fileId);
-//        map.put("fileService", "调用prFile服务的结果是：" + restTemplate.getForObject(path, String.class));
-        map.put("port", "当前的端口是：" + port);
-
-
-        return map;
-    }
+//    //@RequestParam("prId") String prId,@RequestParam("fileId") String fileId
+//    @ApiOperation(value = "测试port", notes = "testport")
+//    @GetMapping("/testport")
+//    public Map<String, Object> findPRselfAndFile() {
+//        log.info("=============ProjectTestController调用到啦");
+////        ServiceInstance serviceInstance = loadBalancerClient.choose("PRFileApplication");
+//        HashMap<String, Object> map = new HashMap<>();
+//        map.put("status", true);
+////        map.put("msg", "当前调用的是PR服务，查询PR的id：" + prId + " 查询的PRfile为：" + fileId);
+////        String path=String.format(serviceInstance+"/prfile/find?id=%s",fileId);
+////        map.put("fileService", "调用prFile服务的结果是：" + restTemplate.getForObject(path, String.class));
+//        map.put("port", "当前的端口是：" + port);
+//
+//
+//        return map;
+//    }
 
     @Autowired
     private RepoBaseService repoBaseService;

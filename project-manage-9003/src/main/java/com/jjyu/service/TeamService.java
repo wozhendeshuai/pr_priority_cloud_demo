@@ -12,45 +12,65 @@ public interface TeamService extends IService<TeamEntity> {
      *
      * @return
      */
-    public List<TeamEntity> getAllTeam();
+    List<TeamEntity> getAllTeam();
 
     /**
      * 获取所有团队，包括用户
      *
      * @return
      */
-    public List<TeamEntity> getAllTeamAndUser();
+    List<TeamEntity> getAllTeamAndUser();
 
     /**
      * 根据用户名，和团队名判断是否有该用户，在这个团队中
+     *
      * @param userName
      * @return
      */
-    boolean hasUserByUserName(String userName,String teamName);
+    boolean hasUserByUserName(String userName, String teamName);
 
     /**
      * 向团队中增加用户
      */
-    public boolean addMember(String teamName, String userName, String userRoleInTeam);
+    boolean addMember(String teamName, String userName, String userRoleInTeam);
 
     /**
-     *从团队中删除用户
-     * @author XJM
-     * @date 2022/1/18
+     * 从团队中删除用户
+     *
      * @param teamName
      * @param userName
      * @return void
+     * @author XJM
+     * @date 2022/1/18
      */
-    public boolean deleteMember(String teamName, String userName);
+    boolean deleteMember(String teamName, String userName);
 
     /**
-     *权限管理
-     * @author XJM
-     * @date 2022/1/19
+     * 权限管理
+     *
      * @param teamName
      * @param userName
      * @param userRoleInTeam
      * @return void
+     * @author XJM
+     * @date 2022/1/19
      */
-    public boolean updateMember(String teamName, String userName, String userRoleInTeam);
+    boolean updateMember(String teamName, String userName, String userRoleInTeam);
+
+    /**
+     * 得到用户所在团队中所有的member成员
+     *
+     * @param teamName
+     * @param userName
+     * @return
+     */
+    TeamEntity getTeamAndMemberUser(String teamName, String userName);
+
+    /**
+     * 列举出不在团队中的用户名称列表
+     * @param teamName
+     * @param userName
+     * @return
+     */
+    List<String> getNotTeamAndUser(String teamName, String userName);
 }

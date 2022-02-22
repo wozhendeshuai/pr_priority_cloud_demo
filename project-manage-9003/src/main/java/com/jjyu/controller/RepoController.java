@@ -35,8 +35,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("project/repo")
 public class RepoController {
-    @Value("${server.port}")
-    private int port;
+
     @Resource
     private UserService userService;
 
@@ -73,6 +72,7 @@ public class RepoController {
 
     //@RequestParam("prId") String prId,@RequestParam("fileId") String fileId
     @GetMapping("/listRepoData")
+    @ApiOperation(value = "listRepoData", notes = "listRepoData")
     public ResultForFront listRepoData(@RequestParam("repoName") String repoName) {
         log.info("=============listTeam");
 
@@ -83,9 +83,7 @@ public class RepoController {
         }
 
 
-        return ResultForFront.succ(MapUtil.builder()
-                .put("port", port)
-                .build());
+        return ResultForFront.succ(repoBaseEntityList);
     }
 
     //1. 手动同步项目以及项目所有数据

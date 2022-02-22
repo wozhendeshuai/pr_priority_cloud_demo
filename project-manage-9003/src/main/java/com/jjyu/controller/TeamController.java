@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,8 +31,7 @@ import java.util.Map;
 @RequestMapping("project/team")
 public class TeamController {
 
-    @Value("${server.port}")
-    private int port;
+
     @Autowired
     private TeamService teamService;
     @Autowired
@@ -39,41 +39,70 @@ public class TeamController {
     @Autowired
     private UserTeamService userTeamService;
 
+
+    /**
+     * 找到该用户参与的所有项目
+     *
+     * @param userName
+     * @return
+     */
+    @ApiOperation(value = "得到用户所在的所有的团队列表", notes = "userTeamList")
+    @GetMapping("userTeamList")
+    public ResultForFront userTeamList(@RequestParam("userName") String userName) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("user_name", userName);
+        List<UserTeamEntity> userTeamEntities = userTeamService.list(queryWrapper);
+        if (ObjectUtils.isEmpty(userTeamEntities)) {
+            return ResultForFront.fail("没有参与过项目，还请积极参与!");
+        }
+        List<String> teamNameList = new ArrayList<>();
+        for (UserTeamEntity userTeam : userTeamEntities) {
+            teamNameList.add(userTeam.getTeamName());
+        }
+
+        return ResultForFront.succ(teamNameList);
+    }
+
     //@RequestParam("prId") String prId,@RequestParam("fileId") String fileId
     @ApiOperation(value = "查看团队列表", notes = "listTeam")
     @GetMapping("/listteam")
     public ResultForFront listTeam() {
         log.info("=============listTeam");
 
-
         List<TeamEntity> teamEntityList = teamService.list();
         for (TeamEntity temp : teamEntityList) {
             log.info(temp.toString());
         }
 
-
-        return ResultForFront.succ(MapUtil.builder()
-                .put("port", "当前的端口是：" + port)
-                .put("teamEntityList", teamEntityList)
-                .build());
+        return ResultForFront.succ(teamEntityList);
     }
 
     //@RequestParam("prId") String prId,@RequestParam("fileId") String fileId
     //这个没改
-    @ApiOperation(value = "查看团队列表和团队中的用户", notes = "listTeamAndUser")
-    @GetMapping("/listTeamAndUser")
-    public ResultForFront listTeamAndUser(@RequestParam("teamName") String teamName) {
-        log.info("=============listTeam");
-
-        List<TeamEntity> teamEntityList = teamService.getAllTeamAndUser();
-        for (TeamEntity temp : teamEntityList) {
-            log.info(temp.toString());
+    @ApiOperation(value = "查看团队列表和团队中的用户", notes = "listTeamAndMemberUser")
+    @GetMapping("/listTeamAndMemberUser")
+    public ResultForFront listTeamAndMemberUser(@RequestParam("teamName") String teamName,
+                                                @RequestParam("userName") String userName) {
+        log.info("=============listTeamAndUser");
+        TeamEntity teamEntity = teamService.getTeamAndMemberUser(teamName, userName);
+        if (ObjectUtils.isEmpty(teamEntity)) {
+            return ResultForFront.fail("后端listTeamAndUser出错");
         }
+        return ResultForFront.succ(teamEntity);
+    }
 
-        return ResultForFront.succ(MapUtil.builder()
-                .put("port", "当前的端口是：" + port)
-                .put("teamEntityList", teamEntityList)
-                .build());
+    //@RequestParam("prId") String prId,@RequestParam("fileId") String fileId
+    //这个没改
+    @ApiOperation(value = "查看非团队成员的用户", notes = "listNotTeamUser")
+    @GetMapping("/listNotTeamUser")
+    public ResultForFront listNotTeamUser(@RequestParam("teamName") String teamName,
+                                          @RequestParam("userName") String userName) {
+        log.info("=============listTeamAndUser");
+        List<String> userNameList = teamService.getNotTeamAndUser(teamName, userName);
+        if (ObjectUtils.isEmpty(userNameList)) {
+            return ResultForFront.fail("后端listTeamAndUser出错");
+        }
+        return ResultForFront.succ(userNameList);
     }
 
     /**
@@ -89,14 +118,15 @@ public class TeamController {
     @GetMapping("/addmember")
     public ResultForFront addMember(@RequestParam("teamName") String teamName,
                                     @RequestParam("userName") String userName,
-                                    @RequestParam("userRoleInTeam") String userRoleInTeam) {
+                                    @RequestParam("userRoleInTeam") String userRoleInTeam,
+                                    @RequestParam("newUserName") String newUserName) {
         //调用枚举类判断是否有该角色
         if (!UserTeamRole.hasRole(userRoleInTeam)) {
             return ResultForFront.fail("角色不存在");
         }
         //判断是否存在该用户
         QueryWrapper userQueryWrapper = new QueryWrapper();
-        userQueryWrapper.eq("user_name", userName);
+        userQueryWrapper.eq("user_name", newUserName);
         UserBaseEntity userBaseEntityTemp = userService.getOne(userQueryWrapper);
         if (userBaseEntityTemp == null) {
             return ResultForFront.fail("无该用户");
@@ -111,13 +141,13 @@ public class TeamController {
         }
 
         //判断该用户是否已在团队中。
-        if (teamService.hasUserByUserName(userName, teamName)) {
+        if (teamService.hasUserByUserName(newUserName, teamName)) {
             return ResultForFront.fail("用户已在团队");
         }
 
         UserTeamEntity userTeamEntity = new UserTeamEntity();
 
-        userTeamEntity.setUserName(userName);
+        userTeamEntity.setUserName(newUserName);
         userTeamEntity.setUserId(userBaseEntityTemp.getUserId());
 
         userTeamEntity.setTeamName(teamName);
@@ -135,10 +165,7 @@ public class TeamController {
         //todo: 发邮件
 
 
-        return ResultForFront.succ(MapUtil.builder()
-                .put("port", "当前的端口是：" + port)
-                .put("teamEntityList", teamEntityList)
-                .build());
+        return ResultForFront.succ(teamEntityList);
     }
 
     /**
@@ -181,10 +208,7 @@ public class TeamController {
             log.info(temp.toString());
         }
 
-        return ResultForFront.succ(MapUtil.builder()
-                .put("status", remove)
-                .put("port", "当前的端口是：" + port)
-                .put("teamEntityList", teamEntityList).build());
+        return ResultForFront.succ(teamEntityList);
     }
 
     /**
@@ -237,11 +261,7 @@ public class TeamController {
             log.info(temp.toString());
         }
 
-        return ResultForFront.succ(MapUtil.builder()
-                .put("status", update)
-                .put("port", "当前的端口是：" + port)
-                .put("teamEntityList", teamEntityList)
-                .build());
+        return ResultForFront.succ(teamEntityList);
     }
 
     @ApiOperation(value = "synAllTeamData", notes = "同步团队所有数据")

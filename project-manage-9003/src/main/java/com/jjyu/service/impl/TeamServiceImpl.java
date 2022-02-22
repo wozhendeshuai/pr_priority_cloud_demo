@@ -8,9 +8,13 @@ import com.jjyu.mapper.UserBaseDao;
 import com.jjyu.entity.TeamEntity;
 import com.jjyu.entity.UserBaseEntity;
 import com.jjyu.service.TeamService;
+import com.jjyu.utils.UserTeamRole;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -19,6 +23,52 @@ public class TeamServiceImpl extends ServiceImpl<TeamBaseDao, TeamEntity> implem
     private TeamBaseDao teamBaseDao;
     @Autowired
     private UserBaseDao userBaseDao;
+
+    @Override
+    public TeamEntity getTeamAndMemberUser(String teamName, String userName) {
+        List<TeamEntity> teamEntityList = teamBaseDao.selectAllTeamAndUser();
+        TeamEntity reTeamEntity = null;
+        for (TeamEntity teamEntity : teamEntityList) {
+            if (teamEntity.getTeamName().equals(teamName)) {
+                reTeamEntity = teamEntity;
+                break;
+            }
+        }
+        if (!ObjectUtils.isEmpty(reTeamEntity)) {
+            List<UserBaseEntity> userBaseEntityList = reTeamEntity.getUserBaseEntityList();
+            List<UserBaseEntity> tempUserList = new ArrayList<>();
+            for (UserBaseEntity userBaseEntity : userBaseEntityList) {
+                if (UserTeamRole.MEMBER.equals(userBaseEntity.getUserRoleInTeam()) || UserTeamRole.ADMIN.equals(userBaseEntity.getUserRoleInTeam())) {
+                    tempUserList.add(userBaseEntity);
+                }
+            }
+            reTeamEntity.setUserBaseEntityList(tempUserList);
+        }
+
+        return reTeamEntity;
+    }
+
+    @Override
+    public List<String> getNotTeamAndUser(String teamName, String userName) {
+        List<TeamEntity> teamEntityList = teamBaseDao.selectAllTeamAndUser();
+
+        List<UserBaseEntity> userBaseEntityList = new ArrayList<>();
+        for (TeamEntity teamEntity : teamEntityList) {
+            userBaseEntityList.addAll(teamEntity.getUserBaseEntityList());
+        }
+        HashSet<String> userNameSet = new HashSet<>();
+        if (!ObjectUtils.isEmpty(userBaseEntityList)) {
+            for (UserBaseEntity userBaseEntity : userBaseEntityList) {
+                if (UserTeamRole.MEMBER.equals(userBaseEntity.getUserRoleInTeam()) || UserTeamRole.ADMIN.equals(userBaseEntity.getUserRoleInTeam())) {
+                    continue;
+                }
+                userNameSet.add(userBaseEntity.getUserName());
+            }
+        }
+        List<String> reList=new ArrayList<>(userNameSet);
+
+        return reList;
+    }
 
     @Override
     public List<TeamEntity> getAllTeam() {
@@ -64,4 +114,6 @@ public class TeamServiceImpl extends ServiceImpl<TeamBaseDao, TeamEntity> implem
         teamBaseDao.updateMember(teamName, userName, userRoleInTeam);
         return true;
     }
+
+
 }
