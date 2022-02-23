@@ -18,6 +18,7 @@
             <result property="email" column="email"></result>
             <result property="githubToken" column="github_token"></result>
             <result property="userRoleInTeam" column="user_role_in_team"></result>
+            <result property="userPowerInTeam" column="user_power"></result>
         </collection>
     </resultMap>
 
@@ -37,7 +38,8 @@
             PASSWORD,
             email,
             github_token,
-            user_role_in_team
+            user_role_in_team,
+            user_power
         FROM
             (
                 SELECT
@@ -46,7 +48,8 @@
                     user_id,
                     user_name,
                     user_role_in_team,
-                    team_size
+                    team_size,
+                    user_power
                 FROM
                     user_team_db AS ut,
                     team_base_db AS t

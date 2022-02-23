@@ -8,6 +8,7 @@ import com.jjyu.service.TeamService;
 import com.jjyu.service.UserService;
 import com.jjyu.service.UserTeamService;
 import com.jjyu.utils.ResultForFront;
+import com.jjyu.utils.UserRepoRole;
 import com.jjyu.utils.UserTeamRole;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -119,11 +120,10 @@ public class TeamController {
     public ResultForFront addMember(@RequestParam("teamName") String teamName,
                                     @RequestParam("userName") String userName,
                                     @RequestParam("userRoleInTeam") String userRoleInTeam,
-                                    @RequestParam("newUserName") String newUserName) {
-        //调用枚举类判断是否有该角色
-        if (!UserTeamRole.hasRole(userRoleInTeam)) {
-            return ResultForFront.fail("角色不存在");
-        }
+                                    @RequestParam("newUserName") String newUserName,
+                                    @RequestParam("newUserPower") String newUserPower,
+                                    @RequestParam("isMail") Boolean isMail) {
+
         //判断是否存在该用户
         QueryWrapper userQueryWrapper = new QueryWrapper();
         userQueryWrapper.eq("user_name", newUserName);
@@ -140,32 +140,26 @@ public class TeamController {
             return ResultForFront.fail("无该团队");
         }
 
-        //判断该用户是否已在团队中。
-        if (teamService.hasUserByUserName(newUserName, teamName)) {
-            return ResultForFront.fail("用户已在团队");
-        }
 
         UserTeamEntity userTeamEntity = new UserTeamEntity();
-
         userTeamEntity.setUserName(newUserName);
         userTeamEntity.setUserId(userBaseEntityTemp.getUserId());
-
         userTeamEntity.setTeamName(teamName);
         userTeamEntity.setTeamId(teamEntityTemp.getTeamId());
+        userTeamEntity.setUserRoleInTeam(UserTeamRole.MEMBER.getUserRole());
+        userTeamEntity.setUserPower(newUserPower);
+        UpdateWrapper updateWrapper = new UpdateWrapper();
+        updateWrapper.eq("user_name", newUserName);
+        updateWrapper.eq("team_name", teamName);
+        userTeamService.update(userTeamEntity, updateWrapper);
 
-        userTeamEntity.setUserRoleInTeam(userRoleInTeam);
-
-        userTeamService.save(userTeamEntity);
-
-        List<TeamEntity> teamEntityList = teamService.getAllTeamAndUser();
-        for (TeamEntity temp : teamEntityList) {
-            log.info(temp.toString());
+        if (isMail) {
+            //todo: 发邮件
+            log.info("此处发邮件");
         }
 
-        //todo: 发邮件
 
-
-        return ResultForFront.succ(teamEntityList);
+        return ResultForFront.succ("完成新增团队成员");
     }
 
     /**
@@ -176,12 +170,13 @@ public class TeamController {
      * @return
      */
     @ApiOperation(value = "从指定团队中删除用户", notes = "deleteMember")
-    @PostMapping("/delmember")
+    @GetMapping ("/delmember")
     public ResultForFront deleteMember(@RequestParam("teamName") String teamName,
-                                       @RequestParam("userName") String userName) {
+                                       @RequestParam("userName") String userName,
+                                       @RequestParam("delUserName") String delUserName) {
         //判断是否存在该用户
         QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.eq("user_name", userName);
+        queryWrapper.eq("user_name", delUserName);
         UserBaseEntity userBaseEntityTemp = userService.getOne(queryWrapper);
         if (userBaseEntityTemp == null) {
             return ResultForFront.fail("无该用户");
@@ -195,20 +190,26 @@ public class TeamController {
             return ResultForFront.fail("无该团队");
         }
 
-        //判断该用户是否已在团队中。
-        if (!teamService.hasUserByUserName(userName, teamName)) {
-            return ResultForFront.fail("用户不在团队");
+        TeamEntity teamEntity = teamService.getTeamAndMemberUser(teamName, delUserName);
+        List<UserBaseEntity> userBaseEntityList = teamEntity.getUserBaseEntityList();
+        if (!userBaseEntityList.contains(userBaseEntityTemp)) {
+            return ResultForFront.succ("此用户非团队成员不需删除");
         }
 
-        queryWrapper.eq("team_name", teamName);
-        boolean remove = userTeamService.remove(queryWrapper);
+        //将其从团队成员的角色置为非团队成员角色即可，同时权限清空
+        UserTeamEntity userTeamEntity = new UserTeamEntity();
+        userTeamEntity.setUserName(delUserName);
+        userTeamEntity.setUserId(userBaseEntityTemp.getUserId());
+        userTeamEntity.setTeamName(teamName);
+        userTeamEntity.setTeamId(teamEntityTemp.getTeamId());
+        userTeamEntity.setUserRoleInTeam(UserTeamRole.GUEST.getUserRole());
+        userTeamEntity.setUserPower(null);
+        UpdateWrapper updateWrapper = new UpdateWrapper();
+        updateWrapper.eq("user_name", delUserName);
+        updateWrapper.eq("team_name", teamName);
+        userTeamService.update(userTeamEntity, updateWrapper);
 
-        List<TeamEntity> teamEntityList = teamService.getAllTeamAndUser();
-        for (TeamEntity temp : teamEntityList) {
-            log.info(temp.toString());
-        }
-
-        return ResultForFront.succ(teamEntityList);
+        return ResultForFront.succ("已从团队成员中剔除该用户");
     }
 
     /**
@@ -216,22 +217,20 @@ public class TeamController {
      *
      * @param teamName
      * @param userName
-     * @param userRoleInTeam
+     * @param newUserPower
      * @return
      */
     @ApiOperation(value = "权限管理", notes = "updateMember")
-    @PostMapping("/updatemember")
+    @GetMapping("/updatemember")
     public ResultForFront updateMember(@RequestParam("teamName") String teamName,
                                        @RequestParam("userName") String userName,
-                                       @RequestParam("userRoleInTeam") String userRoleInTeam) {
-        //调用枚举类判断是否有该角色
-        if (!UserTeamRole.hasRole(userRoleInTeam)) {
-            return ResultForFront.fail("角色不存在");
-        }
+                                       @RequestParam("updateUserName") String updateUserName,
+                                       @RequestParam("newUserPower") String newUserPower) {
+
 
         //判断是否存在该用户
         QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.eq("user_name", userName);
+        queryWrapper.eq("user_name", updateUserName);
         UserBaseEntity userBaseEntityTemp = userService.getOne(queryWrapper);
         if (userBaseEntityTemp == null) {
             return ResultForFront.fail("无该用户");
@@ -245,24 +244,28 @@ public class TeamController {
             return ResultForFront.fail("无该团队");
         }
 
-        //判断该用户是否已在团队中。
-        if (!teamService.hasUserByUserName(userName, teamName)) {
-            return ResultForFront.fail("用户不在团队");
+        TeamEntity teamEntity = teamService.getTeamAndMemberUser(teamName, updateUserName);
+        List<UserBaseEntity> userBaseEntityList = teamEntity.getUserBaseEntityList();
+        if (!userBaseEntityList.contains(userBaseEntityTemp)) {
+            return ResultForFront.succ("此用户非团队成员不无权限需要更新");
         }
+
+        //将其从团队成员的角色置为非团队成员角色即可，同时权限清空
+        UserTeamEntity userTeamEntity = new UserTeamEntity();
+        userTeamEntity.setUserName(updateUserName);
+        userTeamEntity.setUserId(userBaseEntityTemp.getUserId());
+        userTeamEntity.setTeamName(teamName);
+        userTeamEntity.setTeamId(teamEntityTemp.getTeamId());
+        userTeamEntity.setUserRoleInTeam(UserTeamRole.MEMBER.getUserRole());
+        userTeamEntity.setUserPower(newUserPower);
         UpdateWrapper updateWrapper = new UpdateWrapper();
-        updateWrapper.eq("user_name", userName);
+        updateWrapper.eq("user_name", updateUserName);
         updateWrapper.eq("team_name", teamName);
-        UserTeamEntity userTeamEntity = userTeamService.getOne(updateWrapper);
-        userTeamEntity.setUserRoleInTeam(userRoleInTeam);
-        boolean update = userTeamService.update(userTeamEntity, updateWrapper);
+        userTeamService.update(userTeamEntity, updateWrapper);
 
-        List<TeamEntity> teamEntityList = teamService.getAllTeamAndUser();
-        for (TeamEntity temp : teamEntityList) {
-            log.info(temp.toString());
-        }
-
-        return ResultForFront.succ(teamEntityList);
+        return ResultForFront.succ("已更新" + updateUserName + "用户权限");
     }
+
 
     @ApiOperation(value = "synAllTeamData", notes = "同步团队所有数据")
     @PostMapping("/synAllTeamData")

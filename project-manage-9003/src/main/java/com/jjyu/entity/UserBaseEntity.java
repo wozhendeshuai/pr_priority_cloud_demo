@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @Data
 @TableName("user_base_db")
@@ -40,4 +41,20 @@ public class UserBaseEntity implements Serializable {
      */
     @TableField(exist = false)
     private String userRoleInTeam;
+
+    /**
+     * 用户中在团队当的权限，以，隔开
+     */
+    @TableField(exist = false)
+    private String userPowerInTeam;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserBaseEntity that = (UserBaseEntity) o;
+        return userId.equals(that.userId) && userName.equals(that.userName) && Objects.equals(password, that.password) && Objects.equals(email, that.email) && Objects.equals(githubToken, that.githubToken);
+    }
+
+
 }

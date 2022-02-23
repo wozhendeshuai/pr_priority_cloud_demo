@@ -3,7 +3,8 @@ package com.jjyu.utils;
 import org.apache.commons.lang3.StringUtils;
 
 public enum UserTeamRole {
-
+    GUEST("NONE", "访客非本代码仓成员可以创建，查看，评论PR"),
+    CONTRIBUTOR("CONTRIBUTOR", "本代码仓贡献者可以创建，查看，查看自己的，评论PR"),
     MEMBER("MEMBER", "本团队核心成员,可以查看所有人的信息"),
     ADMIN("ADMIN", "本团队管理员，可以查看所有人的信息,新增，删除成员以及管理者");
     private String userRole;

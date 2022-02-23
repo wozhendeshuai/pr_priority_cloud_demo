@@ -39,9 +39,6 @@ public interface TeamService extends IService<TeamEntity> {
      *
      * @param teamName
      * @param userName
-     * @return void
-     * @author XJM
-     * @date 2022/1/18
      */
     boolean deleteMember(String teamName, String userName);
 
@@ -51,9 +48,6 @@ public interface TeamService extends IService<TeamEntity> {
      * @param teamName
      * @param userName
      * @param userRoleInTeam
-     * @return void
-     * @author XJM
-     * @date 2022/1/19
      */
     boolean updateMember(String teamName, String userName, String userRoleInTeam);
 

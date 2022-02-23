@@ -31,8 +31,13 @@ public class UserTeamEntity implements Serializable {
     @TableField("team_name")
     private String teamName;
     /**
-     * 用户在团队当中的权限，以#隔开
+     * 用户在团队当中的角色
      */
     @TableField("user_role_in_team")
     private String userRoleInTeam;
+    /**
+     * 用户中在团队当的权限，以，隔开
+     */
+    @TableField("user_power")
+    private String userPower;
 }
