@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jjyu.entity.*;
 import com.jjyu.service.*;
+import com.jjyu.utils.DateTimeUtil;
 import com.jjyu.utils.GetPythonOutputThread;
 import com.jjyu.utils.PythonFilePath;
 import com.jjyu.utils.ResultForFront;
@@ -14,6 +15,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +35,7 @@ public class AllDataServiceImpl implements AllDataService {
     private final String projectManageURL = "http://localhost:9003";
 
     @Override
+    @Async("taskExecutor")
     public void synData(String maxPRNum, String ownerName, String repoName) {
         String maxPRNumStr = maxPRNum;
         //测试多种条件下不同的输出情况 !!!==加上参数u让脚本实时输出==!!!
@@ -143,12 +146,23 @@ public class AllDataServiceImpl implements AllDataService {
         RepoDayEntity repoDayEntity = new RepoDayEntity();
         repoDayEntity.setRepoBaseEntity(repoBaseEntity);
         repoDayEntity.setRepoId(prRepoEntity.getRepoId());
+
+        try {
+            repoDayEntity.setDateDay(DateTimeUtil.getDDate());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         repoDayEntity.setRepoUpdatedAt(prRepoEntity.getProjectUpdatedAt());
         repoDayEntity.setRepoPushedAt(prRepoEntity.getProjectPushedAt());
         repoDayEntity.setWatchersNum(prRepoEntity.getWatchers());
         repoDayEntity.setStarsNum(prRepoEntity.getStars());
         repoDayEntity.setForksNum(prRepoEntity.getForksCount());
         repoDayEntity.setContributorNum(prRepoEntity.getContributorNum());
+        queryWrapper=new QueryWrapper();
+        queryWrapper.eq("repo_name",repoName);
+        queryWrapper.eq("state","open");
+        repoDayEntity.setOpenPrNum(prSelfService.count(queryWrapper));
+
         JSONObject jsonObject = (JSONObject) JSON.toJSON(repoDayEntity);
         log.info(jsonObject.toJSONString());
 

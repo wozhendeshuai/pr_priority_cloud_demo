@@ -100,7 +100,7 @@ public class DataController {
         return ResultForFront.succ(prSelfEntity);
     }
 
-    @PostMapping("/synData")
+    @GetMapping("/synData")
     @ApiOperation(value = "synData", notes = "synData")
     public ResultForFront synData(@RequestParam("maxPRNum") String maxPRNum,
                                   @RequestParam("ownerName") String ownerName,

@@ -13,4 +13,9 @@ public interface RepoDataService {
      */
     public RepoBaseEntity getRepoBaseDataFromDataCollection(String repoName);
 
+    /**
+     * 要求数据微服务去同步数据
+     * @param repoName
+     */
+    void synAllData(String repoName,Integer maxPRNum);
 }

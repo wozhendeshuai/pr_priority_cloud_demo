@@ -2,6 +2,7 @@ package com.jjyu.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -21,6 +22,12 @@ public class RepoDayEntity implements Serializable {
      */
     @TableField("repo_id")
     private Integer repoId;
+    /**
+     * 数据日期
+     */
+    @TableField("date_day")
+    @JsonFormat(pattern = "yyyy年MM月dd日", timezone = "Asia/Shanghai")
+    private Date dateDay;
     /**
      * 代码仓更新时间
      */
@@ -51,4 +58,9 @@ public class RepoDayEntity implements Serializable {
      */
     @TableField("contributor_num")
     private Integer contributorNum;
+    /**
+     * 代码仓开放状态PR数量
+     */
+    @TableField("open_pr_num")
+    private Integer openPrNum;
 }

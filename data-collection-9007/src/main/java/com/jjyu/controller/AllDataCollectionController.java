@@ -10,10 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.Date;
@@ -26,7 +23,7 @@ public class AllDataCollectionController {
     private AllDataService allDataService;
 
 
-    @PostMapping("/synAllData")
+    @GetMapping("/synAllData")
     @ApiOperation(value = "synData", notes = "synData")
     public ResultForFront synData(@RequestParam("maxPRNum") String maxPRNum,
                                   @RequestParam("ownerName") String ownerName,

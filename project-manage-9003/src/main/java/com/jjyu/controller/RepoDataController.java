@@ -1,24 +1,23 @@
 package com.jjyu.controller;
 
 
-import cn.hutool.core.map.MapUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.jjyu.entity.RepoBaseEntity;
 import com.jjyu.entity.RepoDayEntity;
 import com.jjyu.entity.TeamEntity;
-import com.jjyu.service.*;
-
+import com.jjyu.service.RepoBaseService;
+import com.jjyu.service.RepoDayService;
+import com.jjyu.service.TeamService;
+import com.jjyu.service.UserService;
+import com.jjyu.utils.DateTimeUtil;
 import com.jjyu.utils.ResultForFront;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -38,6 +37,25 @@ public class RepoDataController {
     @Autowired
     private RepoDayService repoDayService;
 
+    @ApiOperation(value = "getRepoDataList", notes = "获取项目所有日期数据")
+    @GetMapping("/getRepoDataList")
+    public ResultForFront getRepoDataList(@RequestParam("userName") String userName,
+                                          @RequestParam("repoName") String repoName) {
+        log.info("=============getAllData");
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("repo_name", repoName);
+        RepoBaseEntity repoBaseEntity = repoBaseService.getOne(queryWrapper);
+        queryWrapper = new QueryWrapper();
+        queryWrapper.eq("repo_id", repoBaseEntity.getRepoId());
+        List<RepoDayEntity> repoDayEntities = repoDayService.list(queryWrapper);
+        repoDayEntities.sort((o1, o2) -> {
+            if (o1.getDateDay().before(o2.getDateDay())) {
+                return 1;
+            }
+            return -1;
+        });
+        return ResultForFront.succ(repoDayEntities);
+    }
 
     @ApiOperation(value = "getAllData", notes = "获取所有数据")
     @GetMapping("/getAllData")
@@ -81,8 +99,6 @@ public class RepoDataController {
         UpdateWrapper updateWrapper = new UpdateWrapper();
         updateWrapper.eq("repo_id", repoId);
         RepoBaseEntity repoBaseEntity = repoBaseService.getOne(queryWrapper);
-        RepoDayEntity repoDayEntityTemp = repoDayService.getOne(queryWrapper);
-
         RepoBaseEntity repoBase = repoDayEntity.getRepoBaseEntity();
         repoBase.setTeamId(teamEntity.getTeamId());
         if (ObjectUtils.isEmpty(repoBaseEntity)) {
@@ -91,9 +107,14 @@ public class RepoDataController {
             repoBaseService.update(repoBase, updateWrapper);
         }
 
+
+        queryWrapper.eq("date_day", DateTimeUtil.getDate());
+        RepoDayEntity repoDayEntityTemp = repoDayService.getOne(queryWrapper);
+
         if (ObjectUtils.isEmpty(repoDayEntityTemp)) {
             repoDayService.save(repoDayEntity);
         } else {
+            updateWrapper.eq("date_day", DateTimeUtil.getDate());
             repoDayService.update(repoDayEntity, updateWrapper);
         }
 

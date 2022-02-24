@@ -20,6 +20,10 @@ public class RepoDayEntity implements Serializable {
      */
     private Integer repoId;
     /**
+     * 数据日期
+     */
+    private Date dateDay;
+    /**
      * 代码仓更新时间
      */
     private Date repoUpdatedAt;
@@ -43,4 +47,5 @@ public class RepoDayEntity implements Serializable {
      * 代码仓贡献者数量
      */
     private Integer contributorNum;
+    private Integer openPrNum;
 }
