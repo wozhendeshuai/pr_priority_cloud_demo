@@ -18,4 +18,6 @@ public interface RepoDataService {
      * @param repoName
      */
     void synAllData(String repoName,Integer maxPRNum);
+
+    void addNewRepo(String repoName, String ownerName, Integer maxPRNum);
 }

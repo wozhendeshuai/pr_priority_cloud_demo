@@ -58,7 +58,7 @@ public class RepoDataServiceImpl implements RepoDataService {
         ServiceInstance serviceInstance = loadBalancerClient.choose(serviceId);
         log.info("============serviceInstance:  " + serviceInstance.toString());
         //拼接URL
-        String path = String.format(serviceurl + "/dataCollection/allData/synAllData?maxPRNum=" + repoName
+        String path = String.format(serviceurl + "/dataCollection/allData/synAllData?maxPRNum=" + maxPRNum
                 + "&ownerName=" + repoBaseEntity.getTeamName()
                 + "&repoName=" + repoName);
         log.info("============path:  " + path);
@@ -66,6 +66,24 @@ public class RepoDataServiceImpl implements RepoDataService {
         Map<String, Object> dataMap = (Map<String, Object>) templateForObject.get("data");
 
         log.info("============templateForObject:  " + templateForObject);
+
+    }
+
+    @Override
+    @Async("taskExecutor")
+    public void addNewRepo(String repoName, String ownerName, Integer maxPRNum) {
+        ServiceInstance serviceInstance = loadBalancerClient.choose(serviceId);
+        log.info("============serviceInstance:  " + serviceInstance.toString());
+        //拼接URL
+        String path = String.format(serviceurl + "/dataCollection/allData/synAllData?maxPRNum=" + maxPRNum
+                + "&ownerName=" + ownerName
+                + "&repoName=" + repoName);
+        log.info("============path:  " + path);
+        Map<String, Object> templateForObject = restTemplate.getForObject(path, Map.class);
+        Map<String, Object> dataMap = (Map<String, Object>) templateForObject.get("data");
+
+        log.info("============templateForObject:  " + templateForObject);
+//       todo: 设置一个定时任务
 
     }
 
