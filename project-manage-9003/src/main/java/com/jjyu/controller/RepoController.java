@@ -1,7 +1,6 @@
 package com.jjyu.controller;
 
 
-import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jjyu.entity.PRTask;
 import com.jjyu.entity.RepoBaseEntity;
@@ -15,16 +14,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
-import java.net.http.HttpClient;
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -138,8 +132,8 @@ public class RepoController {
         queryWrapper.eq("repo_name", repoName);
         RepoBaseEntity repoBaseEntity = repoBaseService.getOne(queryWrapper);
         //拼接URL
-        RestTemplate restTemplate =new RestTemplate();
-        String path = String.format("https://api.github.com/repos/" + repoBaseEntity.getTeamName() + "/" + repoName + "/branches");//
+        RestTemplate restTemplate = new RestTemplate();
+        String path = String.format("https://api.github.com/repos/" + repoBaseEntity.getTeamName() + "/" + repoName + "/branches?per_page=100");//
         log.info("============path:  " + path);
         List templateForObject = restTemplate.getForObject(path, List.class);
 
