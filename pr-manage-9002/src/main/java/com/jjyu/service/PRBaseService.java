@@ -25,13 +25,42 @@ public interface PRBaseService {
     PRDetail getOnePRDetail(String repoName, Integer prNumber);
 
     //1.新建PR
-    boolean newPR(String userName, String repoName);
+    boolean newPR(String userName, String repoName, String ownerName, String baseBranch, String compareBranch, String prTitle, String prContent);
 
-    //2.合入PR
-    boolean mergePR(String userName, String prNumber, String repoName);
+    /**
+     * 2.合入PR
+     *
+     * @param userName
+     * @param prNumber
+     * @param ownerName
+     * @param repoName
+     * @param commitTitle
+     * @param commitMessage
+     * @param mergeMethod
+     * @return
+     */
+    boolean mergePR(String userName, Integer prNumber, String ownerName, String repoName, String commitTitle, String commitMessage, String mergeMethod);
 
-    //3.关闭PR
-    boolean closePR(String userName, String prNumber, String repoName);
+    /**
+     * 更新PR信息，哪个不空更新哪个
+     *
+     * @param userName
+     * @param repoName
+     * @param ownerName
+     * @param prNumber
+     * @param title
+     * @param body
+     * @param state
+     * @return
+     */
+    boolean updatePR(String userName,
+                     String repoName,
+                     String ownerName,
+                     Integer prNumber,
+                     String title,
+                     String body,
+                     String state);
+
 
     //4.查看PR详情
     PRDetail prDetail(String prNumber, String repoName);
@@ -44,5 +73,5 @@ public interface PRBaseService {
 
     List<String> listPRFileList(String repoName, String prNumber);
 
-    PRFileDetail getPRFileDetail(String repoName, String prNumber,String fileName);
+    PRFileDetail getPRFileDetail(String repoName, String prNumber, String fileName);
 }

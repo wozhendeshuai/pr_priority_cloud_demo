@@ -85,27 +85,54 @@ public class PRBaseController {
     @ApiOperation(value = "newPR", notes = "newPR")
     @GetMapping("newPR")
     public ResultForFront newPR(@RequestParam("userName") String userName,
-                                @RequestParam("repoName") String repoName) {
+                                @RequestParam("repoName") String repoName,
+                                @RequestParam("ownerName") String ownerName,
+                                @RequestParam("baseBranch") String baseBranch,
+                                @RequestParam("compareBranch") String compareBranch,
+                                @RequestParam("prTitle") String prTitle,
+                                @RequestParam("prContent") String prContent) {
+        boolean flag = prBaseService.newPR(userName, repoName, ownerName, baseBranch, compareBranch, prTitle, prContent);
+        if (flag) {
+            return ResultForFront.succ("新建PR成功");
+        } else {
+            return ResultForFront.fail("新建PR失败");
+        }
 
-        return ResultForFront.succ("");
     }
 
     //2.合入PR
     @ApiOperation(value = "mergePR", notes = "mergePR")
     @GetMapping("mergePR")
     public ResultForFront mergePR(@RequestParam("userName") String userName,
-                                  @RequestParam("prNumber") String prNumber,
-                                  @RequestParam("repoName") String repoName) {
-        return ResultForFront.succ("");
+                                  @RequestParam("prNumber") Integer prNumber,
+                                  @RequestParam("ownerName") String ownerName,
+                                  @RequestParam("repoName") String repoName,
+                                  @RequestParam("commitTitle") String commitTitle,
+                                  @RequestParam("commitMessage") String commitMessage,
+                                  @RequestParam("mergeMethod") String mergeMethod) {
+        boolean isMerge=prBaseService.mergePR(  userName,   prNumber,   ownerName,   repoName,   commitTitle,   commitMessage,   mergeMethod);
+        if(isMerge){
+            return ResultForFront.succ("合入PR成功");
+        }else{
+            return ResultForFront.fail("合入PR失败");
+        }
+
     }
 
     //3.关闭PR
     @ApiOperation(value = "closePR", notes = "closePR")
     @GetMapping("closePR")
     public ResultForFront closePR(@RequestParam("userName") String userName,
-                                  @RequestParam("prNumber") String prNumber,
-                                  @RequestParam("repoName") String repoName) {
-        return ResultForFront.succ("");
+                                  @RequestParam("repoName") String repoName,
+                                  @RequestParam("ownerName") String ownerName,
+                                  @RequestParam("prNumber") Integer prNumber) {
+        boolean closeOrNot = prBaseService.updatePR(userName, repoName, ownerName, prNumber, null, null, "closed");
+        if (closeOrNot) {
+            return ResultForFront.succ("关闭PR成功");
+        } else {
+            return ResultForFront.succ("关闭PR失败");
+        }
+
     }
 
     //4.查看PR详情

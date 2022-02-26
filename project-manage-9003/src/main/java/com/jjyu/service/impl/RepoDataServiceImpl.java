@@ -1,10 +1,12 @@
 package com.jjyu.service.impl;
 
+import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jjyu.entity.RepoBaseEntity;
 import com.jjyu.service.RepoBaseService;
 import com.jjyu.service.RepoDataService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
@@ -12,6 +14,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -55,6 +58,10 @@ public class RepoDataServiceImpl implements RepoDataService {
         queryWrapper.eq("repo_name", repoName);
         RepoBaseEntity repoBaseEntity = repoBaseService.getOne(queryWrapper);
 
+        //此处自动获取最大PR编号
+        maxPRNum = findMaxPRNumber(repoBaseEntity.getTeamName(), repoName);
+        log.info("============maxPRNum" + maxPRNum);
+
         ServiceInstance serviceInstance = loadBalancerClient.choose(serviceId);
         log.info("============serviceInstance:  " + serviceInstance.toString());
         //拼接URL
@@ -87,4 +94,20 @@ public class RepoDataServiceImpl implements RepoDataService {
 
     }
 
+    private int findMaxPRNumber(String ownerName, String repoName) {
+        RestTemplate tempRestTemplate = new RestTemplate();
+        String pullListPath = String.format("https://api.github.com/repos/" + ownerName + "/" + repoName + "/pulls");//
+        log.info("============pullListPath:  " + pullListPath);
+        List templateForObject = tempRestTemplate.getForObject(pullListPath, List.class);
+        if (ObjectUtils.isEmpty(templateForObject)) {
+            return 0;
+        }
+        System.out.println(templateForObject);
+
+        JSONObject jsonObject = new JSONObject(templateForObject.get(0));
+
+        System.out.println(jsonObject);
+
+        return jsonObject.get("number", Integer.class) + 2;
+    }
 }

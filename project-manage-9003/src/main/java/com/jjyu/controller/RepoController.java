@@ -108,6 +108,7 @@ public class RepoController {
                                         @RequestParam("maxPRNum") Integer maxPRNum) {
         log.info("==================手动同步项目所有数据");
         repoDataService.synAllData(repoName, maxPRNum);
+        //此处可以自动获取最大值，但是以防数据一次性同步太多出现错误，目前前且不用
         return ResultForFront.succ("后台正在同步中，还请耐心等待。。。");
     }
 
