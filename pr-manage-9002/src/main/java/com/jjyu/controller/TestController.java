@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("test")
+@RequestMapping("prManage/test")
 public class TestController {
     @Value("${server.port}")
     private int port;

@@ -64,7 +64,7 @@ public class AlgSortController {
     @ApiOperation(value = "重新训练某一算法模型此处应当为异步方法", notes = "reTrainAlg")
     public ResultForFront reTrainAlg(@RequestParam("repoName") String repoName,
                                      @RequestParam("algName") String algName,
-                                     @RequestParam("algPara") String algParam,
+                                     @RequestParam("algParam") String algParam,
                                      @RequestParam("newFeature") Boolean newFeature,
                                      @RequestParam("userName") String userName) {
         QueryWrapper queryWrapper = new QueryWrapper();

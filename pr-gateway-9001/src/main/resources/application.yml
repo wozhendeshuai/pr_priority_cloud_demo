@@ -38,5 +38,5 @@ spring:
         - id: pr-manage
           uri: lb://pr-manage-9002 #找到在nacos上相同服务名的ip
           predicates:
-            - Path=/** #匹配后提供服务的路由地址
+            - Path=/prManage/** #匹配后提供服务的路由地址
 
