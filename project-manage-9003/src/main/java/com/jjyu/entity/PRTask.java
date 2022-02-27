@@ -36,6 +36,16 @@ public class PRTask implements Serializable {
      * 任务涉及的代码仓
      */
     private String repoName;
+
+    private String teamName;
+    /**
+     * 任务涉及的算法名称
+     */
+    private String algName;
+    /**
+     * 任务涉及的算法参数
+     */
+    private String algParam;
     /**
      * 任务描述
      */
@@ -93,7 +103,7 @@ public class PRTask implements Serializable {
 
     private List<String> authOrganizeIds;
 
-    private String auth_user;
+    private String authUser;
 
     private String oldJobName;
 
@@ -104,11 +114,11 @@ public class PRTask implements Serializable {
         if (this == o) return true;
         if (!(o instanceof PRTask)) return false;
         PRTask prTask = (PRTask) o;
-        return Objects.equals(id, prTask.id) && Objects.equals(type, prTask.type) && Objects.equals(jobName, prTask.jobName) && Objects.equals(jobGroup, prTask.jobGroup) && Objects.equals(repoName, prTask.repoName) && Objects.equals(description, prTask.description) && Objects.equals(jobUser, prTask.jobUser) && Objects.equals(jobClassName, prTask.jobClassName) && Objects.equals(cronExpression, prTask.cronExpression) && Objects.equals(triggerTime, prTask.triggerTime) && Objects.equals(triggerState, prTask.triggerState) && Objects.equals(orderBy, prTask.orderBy) && Objects.equals(remark, prTask.remark) && Objects.equals(createTime, prTask.createTime) && Objects.equals(createUser, prTask.createUser) && Objects.equals(createOrganize, prTask.createOrganize) && Objects.equals(updateUser, prTask.updateUser) && Objects.equals(updateTime, prTask.updateTime) && Objects.equals(authOrganizeIds, prTask.authOrganizeIds) && Objects.equals(auth_user, prTask.auth_user) && Objects.equals(oldJobName, prTask.oldJobName) && Objects.equals(oldJobGroup, prTask.oldJobGroup);
+        return Objects.equals(id, prTask.id) && Objects.equals(type, prTask.type) && Objects.equals(jobName, prTask.jobName) && Objects.equals(jobGroup, prTask.jobGroup) && Objects.equals(repoName, prTask.repoName) && Objects.equals(description, prTask.description) && Objects.equals(jobUser, prTask.jobUser) && Objects.equals(jobClassName, prTask.jobClassName) && Objects.equals(cronExpression, prTask.cronExpression) && Objects.equals(triggerTime, prTask.triggerTime) && Objects.equals(triggerState, prTask.triggerState) && Objects.equals(orderBy, prTask.orderBy) && Objects.equals(remark, prTask.remark) && Objects.equals(createTime, prTask.createTime) && Objects.equals(createUser, prTask.createUser) && Objects.equals(createOrganize, prTask.createOrganize) && Objects.equals(updateUser, prTask.updateUser) && Objects.equals(updateTime, prTask.updateTime) && Objects.equals(authOrganizeIds, prTask.authOrganizeIds) && Objects.equals(authUser, prTask.authUser) && Objects.equals(oldJobName, prTask.oldJobName) && Objects.equals(oldJobGroup, prTask.oldJobGroup);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, type, jobName, jobGroup, repoName, description, jobUser, jobClassName, cronExpression, triggerTime, triggerState, orderBy, remark, createTime, createUser, createOrganize, updateUser, updateTime, authOrganizeIds, auth_user, oldJobName, oldJobGroup);
+        return Objects.hash(id, type, jobName, jobGroup, repoName, description, jobUser, jobClassName, cronExpression, triggerTime, triggerState, orderBy, remark, createTime, createUser, createOrganize, updateUser, updateTime, authOrganizeIds, authUser, oldJobName, oldJobGroup);
     }
 }

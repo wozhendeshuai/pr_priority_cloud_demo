@@ -2,6 +2,7 @@ package com.jjyu.service.impl;
 
 import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.jjyu.entity.PRTask;
 import com.jjyu.entity.RepoBaseEntity;
 import com.jjyu.service.RepoBaseService;
 import com.jjyu.service.RepoDataService;
@@ -14,6 +15,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -78,19 +80,72 @@ public class RepoDataServiceImpl implements RepoDataService {
 
     @Override
     @Async("taskExecutor")
-    public void addNewRepo(String repoName, String ownerName, Integer maxPRNum) {
+    public void addNewRepo(String repoName, String ownerName, Integer maxPRNum, String userName) {
         ServiceInstance serviceInstance = loadBalancerClient.choose(serviceId);
         log.info("============serviceInstance:  " + serviceInstance.toString());
-        //拼接URL
-        String path = String.format(serviceurl + "/dataCollection/allData/synAllData?maxPRNum=" + maxPRNum
-                + "&ownerName=" + ownerName
-                + "&repoName=" + repoName);
-        log.info("============path:  " + path);
-        Map<String, Object> templateForObject = restTemplate.getForObject(path, Map.class);
-        Map<String, Object> dataMap = (Map<String, Object>) templateForObject.get("data");
 
-        log.info("============templateForObject:  " + templateForObject);
-//       todo: 设置一个定时任务
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("repo_name", repoName);
+        queryWrapper.eq("team_name", ownerName);
+
+
+        RepoBaseEntity repoBaseEntity = repoBaseService.getOne(queryWrapper);
+        if (ObjectUtils.isEmpty(repoBaseEntity)) {
+            //拼接URL
+            String path = String.format(serviceurl + "/dataCollection/allData/synAllData?maxPRNum=" + maxPRNum
+                    + "&ownerName=" + ownerName
+                    + "&repoName=" + repoName);
+            log.info("============path:  " + path);
+            Map<String, Object> templateForObject = restTemplate.getForObject(path, Map.class);
+            Map<String, Object> dataMap = (Map<String, Object>) templateForObject.get("data");
+
+            log.info("============templateForObject:  " + templateForObject);
+        }
+
+        PRTask prTask = new PRTask();
+        prTask.setJobUser(userName);
+        prTask.setJobGroup(ownerName);
+        prTask.setCreateOrganize(ownerName);
+        prTask.setTeamName(ownerName);
+        prTask.setType("repo");
+        prTask.setRepoName(repoName);
+        prTask.setJobClassName("com.jjyu.job.ProjectDataCollectionJob");
+        prTask.setCronExpression("0 0 0/1 * * ? ");
+        //拼接URL
+        String path = String.format(serviceurl + "/prTask/save");
+        log.info("============path:  " + path);
+        Map<String, Object> templateForObject = restTemplate.postForObject(path, prTask, Map.class);
+        log.info("============templateForObject" + templateForObject);
+        log.info("=========================已经设定好数据同步定时任务");
+        List<String> algNameList = new ArrayList<>();
+        algNameList.add("MART");
+        algNameList.add("RankNet");
+        algNameList.add("RankBoost");
+        algNameList.add("AdaRank");
+        algNameList.add("Coordinate_Ascent");
+        algNameList.add("LambdaMART");
+        algNameList.add("ListNet");
+        algNameList.add("Random_Forests");
+        for (String alg_name : algNameList) {
+            log.info("=========================开始初始化" + alg_name + "模型训练定时任务");
+            prTask = new PRTask();
+            prTask.setJobUser(userName);
+            prTask.setJobGroup(ownerName);
+            prTask.setCreateOrganize(ownerName);
+            prTask.setTeamName(ownerName);
+            prTask.setType("alg" + alg_name);
+            prTask.setRepoName(repoName);
+            prTask.setJobClassName("com.jjyu.job.ModelTrainJob");
+            prTask.setCronExpression("0 0 0/1 * * ? ");
+            prTask.setAlgName(alg_name);
+            prTask.setAlgParam("alg_paramTestTestNOne");
+            //拼接URL
+            path = String.format(serviceurl + "/prTask/save");
+            log.info("============path:  " + path);
+            templateForObject = restTemplate.postForObject(path, prTask, Map.class);
+            log.info("============templateForObject" + templateForObject);
+            log.info("=========================已经设定好" + alg_name + "模型训练定时任务");
+        }
 
     }
 

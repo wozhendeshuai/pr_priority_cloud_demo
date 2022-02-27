@@ -1,8 +1,8 @@
 package com.jjyu.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
-
 import com.jjyu.entity.PRTask;
 import com.jjyu.entity.QuartzEntity;
 import com.jjyu.service.PRTaskService;
@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.text.SimpleDateFormat;
@@ -31,6 +30,7 @@ public class PRTaskController {
     @Autowired
     @Qualifier("Scheduler")
     private Scheduler scheduler;
+
     @ApiOperation(value = "getAll", notes = "getAll")
     @GetMapping("all")
     public ResultForFront getAll() {
@@ -38,6 +38,20 @@ public class PRTaskController {
         Map<String, Object> all = new HashMap<>();
         all.put("data", list);
         return ResultForFront.succ(all);
+    }
+
+    @ApiOperation(value = "getPRTask", notes = "getPRTask")
+    @GetMapping("getPRTask")
+    public ResultForFront getPRTask(@RequestParam("repoName") String repoName,
+                                    @RequestParam("taskType") String taskType) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("id", repoName + "#" + taskType);
+        PRTask rePRTask = prTaskService.getOne(queryWrapper);
+        if (ObjectUtils.isEmpty(rePRTask)) {
+            return ResultForFront.fail("无该PR");
+        } else {
+            return ResultForFront.succ(rePRTask);
+        }
     }
 
     /**
@@ -50,13 +64,13 @@ public class PRTaskController {
         try {
             // 创建用户
             String time = getDateTimeStr();
-            prTask.setCreate_time(time);
-            prTask.setCreate_user(prTask.getJob_user());
-            prTask.setCreate_organize(prTask.getJob_group());
-            prTask.setTrigger_time(time);
+            prTask.setCreateTime(time);
+            prTask.setCreateUser(prTask.getJobUser());
+            prTask.setCreateOrganize(prTask.getCreateOrganize());
+            prTask.setTriggerTime(time);
 
-            prTask.setJob_name(prTask.getRepo_name() + "#" + prTask.getType() + "#" + prTask.getJob_group() + "#" + prTask.getJob_user() + "#");
-            prTask.setId(prTask.getRepo_name() + "#" + prTask.getType());
+            prTask.setJobName(prTask.getRepoName() + "#" + prTask.getType() + "#" + prTask.getJobGroup() + "#" + prTask.getJobUser() + "#");
+            prTask.setId(prTask.getRepoName() + "#" + prTask.getType());
             //查询是否已有pr相关定时任务
             QueryWrapper queryWrapper = new QueryWrapper();
             queryWrapper.eq("id", prTask.getId());
@@ -68,11 +82,11 @@ public class PRTaskController {
                 try {
                     prTaskService.save(prTask);
                     QuartzEntity quartz = new QuartzEntity();
-                    quartz.setJobName(prTask.getJob_name());
-                    quartz.setJobGroup(prTask.getJob_group());
-                    quartz.setDescription(prTask.getDescription() + "#" + prTask.getJob_user());
-                    quartz.setCronExpression(prTask.getCron_expression());
-                    quartz.setJobClassName(prTask.getJob_class_name());
+                    quartz.setJobName(prTask.getJobName());
+                    quartz.setJobGroup(prTask.getJobGroup());
+                    quartz.setDescription(prTask.getDescription() + "#" + prTask.getJobUser());
+                    quartz.setCronExpression(prTask.getCronExpression());
+                    quartz.setJobClassName(prTask.getJobClassName());
 
                     //获取Scheduler实例、废弃、使用自动注入的scheduler、否则spring的service将无法注入
                     //Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
@@ -87,8 +101,11 @@ public class PRTaskController {
                     JobDetail job = JobBuilder.newJob(cls)
                             .withIdentity(quartz.getJobName(), quartz.getJobGroup())
                             .withDescription(quartz.getDescription())
-                            .usingJobData("repo_name", prTask.getRepo_name())
-                            .usingJobData("user_name", prTask.getJob_user())
+                            .usingJobData("repo_name", prTask.getRepoName())
+                            .usingJobData("user_name", prTask.getJobUser())
+                            .usingJobData("team_name", prTask.getTeamName())
+                            .usingJobData("alg_name", prTask.getAlgName())
+                            .usingJobData("alg_param", prTask.getAlgParam())
                             .usingJobData("type", prTask.getType())
                             .build();
                     // 触发时间点
@@ -103,10 +120,10 @@ public class PRTaskController {
                 }
             }
         } catch (Exception e) {
-            String message = "新增信息失败";
+            String message = "新增定时任务失败";
             log.error(message, e);
         }
-        return ResultForFront.fail("新增信息失败");
+        return ResultForFront.fail("新增定时任务失败");
     }
 
 
@@ -131,13 +148,13 @@ public class PRTaskController {
             Collection<PRTask> list = prTaskService.listByIds(Arrays.asList(ids));
             for (PRTask prTask : list) {
 
-                TriggerKey triggerKey = TriggerKey.triggerKey(prTask.getJob_name(), prTask.getJob_group());
+                TriggerKey triggerKey = TriggerKey.triggerKey(prTask.getJobName(), prTask.getJobGroup());
                 // 停止触发器
                 scheduler.pauseTrigger(triggerKey);
                 // 移除触发器
                 scheduler.unscheduleJob(triggerKey);
                 // 删除任务
-                scheduler.deleteJob(JobKey.jobKey(prTask.getJob_name(), prTask.getJob_group()));
+                scheduler.deleteJob(JobKey.jobKey(prTask.getJobName(), prTask.getJobGroup()));
             }
             prTaskService.removeByIds(Arrays.asList(ids));
 
@@ -162,11 +179,11 @@ public class PRTaskController {
         try {
 
             String time = getDateTimeStr();
-            prTask.setUpdate_time(time);
-            prTask.setTrigger_time(time);
-            prTask.setTrigger_state("Y");
-            prTask.setOldJobName(prTask.getJob_name());
-            prTask.setOldJobGroup(prTask.getJob_group());
+            prTask.setUpdateTime(time);
+            prTask.setTriggerTime(time);
+            prTask.setTriggerState("Y");
+            prTask.setOldJobName(prTask.getJobName());
+            prTask.setOldJobGroup(prTask.getJobGroup());
             QueryWrapper queryWrapper = new QueryWrapper();
             queryWrapper.eq("id", prTask.getId());
             PRTask prTaskTemp = prTaskService.getOne(queryWrapper);
@@ -176,11 +193,11 @@ public class PRTaskController {
                 prTaskService.updateById(prTask);
                 try {
                     QuartzEntity quartz = new QuartzEntity();
-                    quartz.setJobName(prTask.getJob_name());
-                    quartz.setJobGroup(prTask.getJob_group());
-                    quartz.setDescription(prTask.getDescription() + "#" + prTask.getJob_user());
-                    quartz.setCronExpression(prTask.getCron_expression());
-                    quartz.setJobClassName(prTask.getJob_class_name());
+                    quartz.setJobName(prTask.getJobName());
+                    quartz.setJobGroup(prTask.getJobGroup());
+                    quartz.setDescription(prTask.getDescription() + "#" + prTask.getJobUser());
+                    quartz.setCronExpression(prTask.getCronExpression());
+                    quartz.setJobClassName(prTask.getJobClassName());
                     if (prTask.getOldJobName() != null && prTask.getOldJobName().length() != 0) {
                         quartz.setOldJobName(prTask.getOldJobName());
                         quartz.setOldJobGroup(prTask.getOldJobGroup());
@@ -198,8 +215,11 @@ public class PRTaskController {
                     JobDetail job = JobBuilder.newJob(cls).withIdentity(quartz.getJobName(),
                                     quartz.getJobGroup())
                             .withDescription(quartz.getDescription())
-                            .usingJobData("repo_name", prTask.getRepo_name())
-                            .usingJobData("user_name", prTask.getJob_user())
+                            .usingJobData("repo_name", prTask.getRepoName())
+                            .usingJobData("user_name", prTask.getJobUser())
+                            .usingJobData("team_name", prTask.getTeamName())
+                            .usingJobData("alg_name", prTask.getAlgName())
+                            .usingJobData("alg_param", prTask.getAlgParam())
                             .usingJobData("type", prTask.getType())
                             .build();
                     // 触发时间点
@@ -251,15 +271,15 @@ public class PRTaskController {
     public void stopOrRestore(PRTask prTask) {
 
         try {
-            JobKey key = new JobKey(prTask.getJob_name(), prTask.getJob_group());
-            if (prTask.getTrigger_state().equals("N")) {
+            JobKey key = new JobKey(prTask.getJobName(), prTask.getJobGroup());
+            if (prTask.getTriggerState().equals("N")) {
                 scheduler.pauseJob(key);
                 System.out.println("停止。。。。。");
-            } else if (prTask.getTrigger_state().equals("Y")) {
+            } else if (prTask.getTriggerState().equals("Y")) {
                 scheduler.resumeJob(key);
-                prTask.setTrigger_time(getDateTimeStr());
+                prTask.setTriggerTime(getDateTimeStr());
             }
-            prTask.setUpdate_time(getDateTimeStr());
+            prTask.setUpdateTime(getDateTimeStr());
             prTaskService.updateById(prTask);
 
         } catch (SchedulerException e) {

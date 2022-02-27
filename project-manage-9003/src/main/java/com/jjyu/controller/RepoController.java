@@ -96,7 +96,7 @@ public class RepoController {
                                      @RequestParam("ownerName") String ownerName,
                                      @RequestParam("maxPRNum") Integer maxPRNum) {
         log.info("==================新导入项目所有数据");
-        repoDataService.addNewRepo(repoName, ownerName, maxPRNum);
+        repoDataService.addNewRepo(repoName, ownerName, maxPRNum,userName);
         return ResultForFront.succ("后台正在新增项目中，还请耐心等待。。。");
     }
 

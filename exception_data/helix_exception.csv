@@ -1534,3 +1534,5 @@ helix, 1701, 2022-02-26 18:23:18 , 404{'message': 'Not Found', 'documentation_ur
 helix, 1702, 2022-02-26 18:23:19 , 404{'message': 'Not Found', 'documentation_url': 'https://docs.github.com/rest/reference/pulls#get-a-pull-request'}
 helix, 1707, 2022-02-26 18:23:38 , 404{'message': 'Not Found', 'documentation_url': 'https://docs.github.com/rest/reference/pulls#get-a-pull-request'}
 helix, 1710, 2022-02-26 18:23:48 , 404{'message': 'Not Found', 'documentation_url': 'https://docs.github.com/rest/reference/pulls#get-a-pull-request'}
+helix, 1710, 2022-02-27 12:22:38 , 404{'message': 'Not Found', 'documentation_url': 'https://docs.github.com/rest/reference/pulls#get-a-pull-request'}
+helix, 1712, 2022-02-27 12:22:45 , 404{'message': 'Not Found', 'documentation_url': 'https://docs.github.com/rest/reference/pulls#get-a-pull-request'}

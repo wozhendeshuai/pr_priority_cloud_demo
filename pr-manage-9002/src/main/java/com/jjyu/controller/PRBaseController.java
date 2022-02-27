@@ -90,9 +90,11 @@ public class PRBaseController {
                                 @RequestParam("baseBranch") String baseBranch,
                                 @RequestParam("compareBranch") String compareBranch,
                                 @RequestParam("prTitle") String prTitle,
-                                @RequestParam("prContent") String prContent) {
+                                @RequestParam("prContent") String prContent,
+                                @RequestParam("notifyUserName") String notifyUserName) {
         boolean flag = prBaseService.newPR(userName, repoName, ownerName, baseBranch, compareBranch, prTitle, prContent);
         if (flag) {
+            //如果成功的话去通知用户
             return ResultForFront.succ("新建PR成功");
         } else {
             return ResultForFront.fail("新建PR失败");

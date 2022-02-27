@@ -37,6 +37,6 @@ mybatis-plus:
   mapper-locations: classpath*:/mapper/**.xml
   configuration:
     jdbc-type-for-null: null
-    map-underscore-to-camel-case: false # 数据库下划线自动转驼峰标示关闭
+    map-underscore-to-camel-case: true
   global-config:
     banner: false

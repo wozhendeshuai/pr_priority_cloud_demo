@@ -6,8 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
-public class EasyJob implements Job {
+public class ProjectDataCollectionJob implements Job {
     @Autowired
     private RestTemplate restTemplate;
 
@@ -15,8 +16,7 @@ public class EasyJob implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) {
 
-//        String path = String.format("http://localhost:9001/prfile/synpr?repo_name=123444repoName");
-//        Map forObject = restTemplate.getForObject(path, Map.class);forObject.toString() +
+
         JobDetail jobDetail = jobExecutionContext.getJobDetail();
         JobDataMap jobDataMap = jobDetail.getJobDataMap();
         String repoName = (String) jobDataMap.get("repo_name");
@@ -29,8 +29,9 @@ public class EasyJob implements Job {
         Class<? extends Job> jobClass = jobDetail.getJobClass();
         JobKey key = jobDetail.getKey();
 
-
-        System.out.println("---------------------------------------------------------------");
+        System.out.println("---------------------------开始" + repoName + "项目数据同步任务------------------------------------");
+        System.out.println("---------------------------开始" + repoName + "项目数据同步任务------------------------------------");
+        System.out.println("---------------------------开始" + repoName + "项目数据同步任务------------------------------------");
         System.out.println("jobDataMap==================>" + jobDataMap);
         System.out.println("repoName==================>" + repoName);
         System.out.println("userName==================>" + userName);
@@ -42,6 +43,11 @@ public class EasyJob implements Job {
         System.out.println("jobClass==================>" + jobClass.toString());
         System.out.println("key==================>" + key.toString());
         System.out.println("EasyJob=====================>" + LocalDateTime.now());
-
+        String path = String.format("http://localhost:9001/project/repo/reSynRepoData?repoName=" + repoName + "&userName=" + userName + "&maxPRNum=" + 0);
+        Map forObject = restTemplate.getForObject(path, Map.class);
+        System.out.println(forObject);
+        System.out.println("---------------------------结束" + repoName + "项目数据同步任务------------------------------------");
+        System.out.println("---------------------------结束" + repoName + "项目数据同步任务------------------------------------");
+        System.out.println("---------------------------结束" + repoName + "项目数据同步任务------------------------------------");
     }
 }

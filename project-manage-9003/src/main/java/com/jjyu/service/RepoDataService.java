@@ -19,5 +19,5 @@ public interface RepoDataService {
      */
     void synAllData(String repoName,Integer maxPRNum);
 
-    void addNewRepo(String repoName, String ownerName, Integer maxPRNum);
+    void addNewRepo(String repoName, String ownerName, Integer maxPRNum,String userName);
 }
